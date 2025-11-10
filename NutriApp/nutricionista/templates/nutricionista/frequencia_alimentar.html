@@ -1,0 +1,38 @@
+{% extends "base_nutricionista.html" %}
+{% block content %}
+    
+<div class="frequencia-container">
+    <div class="paciente-info">
+        <span>Paciente: <strong>{{ paciente.nome }}</strong></span>
+    </div>
+    
+    <h2>Cadastrar Frequência de Consumo</h2>
+
+    <form method="post" class="frequencia-form">
+        {% csrf_token %}
+        
+        <div class="form-fields">
+            
+            {% for label_text, freq_field, qtd_field in field_trios %}
+            <div class="form-row">
+                <label for="{{ freq_field.id_for_label }}" class="main-label">{{ label_text }}:</label>
+                
+                <div class="field-group freq-field">
+                    {{ freq_field }}
+                </div>
+                
+                <div class="field-group qtd-field">
+                    <label>Qtd:</label>
+                    {{ qtd_field }}
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        
+        <button type="submit" class="btn-continuar">Salvar</button>
+    </form>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base_nutricionista.html" %}
+{% load static %}
+
+{% block title %}<h2>Frequência de Consumo - {{ paciente.nome }}</h2>{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Avaliação do Estilo de Vida</h2>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar e voltar para Dashboard</button>
+</form>
+</div>
+
+{% endblock %}

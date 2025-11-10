@@ -1,0 +1,215 @@
+{% extends "base_nutricionista.html" %}
+{% block content %}
+
+<div id="custom-alert" class="custom-alert">
+    <span id="alert-message"></span>
+</div>
+<div class="box-central ">
+    <div class = "caixa-titulo">
+    <h2>Selecionar Paciente</h2>
+    </div>
+    <div class="text-center mb-3">
+        <p class="m-0">Paciente selecionado: <strong id="paciente-selecionado">
+            {% if paciente_selecionado %}
+                {{ paciente_selecionado }}
+            {% else %}
+                Nenhum
+            {% endif %}
+        </strong></p>
+    </div>
+
+    <div class="lista-pacientes mb-2">
+        <ul>
+            {% for paciente in pacientes %}
+                <li>
+                    <a href="#" 
+                       class="paciente-link" 
+                       data-id="{{ paciente.id }}" 
+                       data-nome="{{ paciente.nome }}">
+                        {{ paciente.nome }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <br>
+    
+    <div class="caixa-menu-link">
+        <div>
+            <a id="link-antropometria" href="#" class="btn btn-success">
+                Medidas Antropométricas
+            </a>
+            <a id="link-registro-alimentar" href="#" class="btn btn-success">
+                registro_alimentar
+            </a>
+            <a id="link-resultados-medidas" href="#" class="btn btn-secondary">
+                Resultados das Medidas
+            </a>
+        </div>
+
+        <div>
+            <span><a id="link-aspectos_clinicos" href="#" class="btn btn-success">
+                Aspectos Clinicos
+            </a></span>
+            <a id="link-avaliacao_estilo_vida" href="#" class="btn btn-success">
+                Avaliacao Estilo de Vida
+            </a>
+            <a id="link-cadastrar_frequencia" href="#" class="btn btn-secondary">
+                Cadastrar Frequencia
+            </a>
+        </div>
+
+        <div>
+            <a id="link-medicamento" href="#" class="btn btn-success">
+                Medicamento
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+   // 🚨 URLs base para as páginas (DEFINA TODOS AQUI) 🚨
+    // ATENÇÃO: As bases devem terminar em '/'
+    const AVALIACAO_URL_BASE = '/nutricionista/avaliacao/'; // Para Medidas Antropométricas
+    const PACIENTE_URL_BASE = '/nutricionista/paciente/'; // Para a maioria das outras rotas com ID
+    
+    // Função para exibir o alerta personalizado por 3 segundos (mantida)
+    function showTimedAlert(message) {
+        const alertBox = document.getElementById('custom-alert');
+        const alertMessage = document.getElementById('alert-message');
+
+        if (!alertBox || !alertMessage) return;
+
+        alertMessage.textContent = message;
+        alertBox.style.display = 'block';
+        alertBox.classList.add('visible');
+
+        setTimeout(() => {
+            alertBox.classList.remove('visible');
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 300);
+        }, 3000); 
+    }
+
+    // Função para limpar o estado de seleção do paciente e resetar links
+    function clearPatientSelection() {
+        const pacienteLabel = document.getElementById('paciente-selecionado');
+        if (pacienteLabel) {
+            pacienteLabel.textContent = "Nenhum";
+        }
+        
+        // 1. Identifica TODOS os links de ação (agora uma lista completa)
+        const linksToClear = [
+            document.getElementById('link-antropometria'),
+            document.getElementById('link-registro-alimentar'),
+            document.getElementById('link-resultados-medidas'),
+            document.getElementById('link-aspectos_clinicos'),
+            document.getElementById('link-avaliacao_estilo_vida'),
+            document.getElementById('link-cadastrar_frequencia'), 
+            document.getElementById('link-medicamento'),
+        ];
+
+        // 2. Limpa o href de TODOS os links para '#'
+        linksToClear.forEach(link => {
+            if (link) link.href = "#";
+        });
+
+        // 3. Remove destaque visual dos pacientes
+        const pacienteLinks = document.querySelectorAll('.paciente-link');
+        pacienteLinks.forEach(l => l.classList.remove('selecionado'));
+    }
+
+    // Função que define os URLs para todos os botões de ação
+    function setActionLinks(pacienteId) {
+        // Obter todas as referências dos links (corrigidos)
+        const linkAntropometria = document.getElementById('link-antropometria');
+        const linkResultadosMedidas = document.getElementById('link-resultados-medidas');
+        const linkRegistroAlimentar = document.getElementById('link-registro-alimentar');
+        const linkAspectosClinicos = document.getElementById('link-aspectos_clinicos');
+        const linkAvaliacaoEstiloVida = document.getElementById('link-avaliacao_estilo_vida');
+        const linkCadastrarFrequencia = document.getElementById('link-cadastrar_frequencia');
+        const linkMedicamento = document.getElementById('link-medicamento');
+
+        // 🚨 ATUALIZAÇÃO DOS HREFs PARA CORRESPONDER AOS URLs DO DJANGO 🚨
+        
+        // AVALIAÇÃO ANTROPOMÉTRICA: /nutricionista/avaliacao/<id>/
+        if (linkAntropometria) linkAntropometria.href = `${AVALIACAO_URL_BASE}${pacienteId}/`;
+        
+        // RESULTADOS: /nutricionista/paciente/<id>/resultados_medidas/
+        if (linkResultadosMedidas) linkResultadosMedidas.href = `${PACIENTE_URL_BASE}${pacienteId}/resultados_medidas/`;
+        
+        // REGISTRO ALIMENTAR: /nutricionista/paciente/<id>/registro-alimentar/
+        if (linkRegistroAlimentar) linkRegistroAlimentar.href = `${PACIENTE_URL_BASE}${pacienteId}/registro-alimentar/`;
+        
+        // ASPECTOS CLINICOS: /nutricionista/paciente/<id>/aspectos-clinicos/
+        if (linkAspectosClinicos) linkAspectosClinicos.href = `${PACIENTE_URL_BASE}${pacienteId}/aspectos-clinicos/`;
+
+        // AVALIAÇÃO ESTILO DE VIDA: /nutricionista/paciente/<id>/avaliacao-estilo-vida/
+        if (linkAvaliacaoEstiloVida) linkAvaliacaoEstiloVida.href = `${PACIENTE_URL_BASE}${pacienteId}/avaliacao-estilo-vida/`;
+
+        // MEDICAMENTO: /nutricionista/paciente/<id>/medicamentos/
+        if (linkMedicamento) linkMedicamento.href = `${PACIENTE_URL_BASE}${pacienteId}/medicamentos/`;
+        
+        // FREQUENCIA ALIMENTAR: /nutricionista/paciente/<id>/frequencia-alimentar/
+        // Ambos os botões (Cadastrar Frequencia e Frequencia Consumo) apontam para a mesma view
+        const frequenciaUrl = `${PACIENTE_URL_BASE}${pacienteId}/frequencia-alimentar/`;
+        if (linkCadastrarFrequencia) linkCadastrarFrequencia.href = frequenciaUrl;
+        if (linkFrequenciaConsumo) linkFrequenciaConsumo.href = frequenciaUrl;
+    }
+
+
+    // Ação executada ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // 1. Inicializa o estado (limpa links) e mostra alerta inicial
+        clearPatientSelection();
+        setTimeout(() => {
+            showTimedAlert("Selecione um paciente para continuar.");
+        }, 500); 
+        
+        // 2. Coletar TODOS os links de ação para validação
+        const allActionLinks = [
+            document.getElementById('link-antropometria'),
+            document.getElementById('link-registro-alimentar'),
+            document.getElementById('link-resultados-medidas'),
+            document.getElementById('link-aspectos_clinicos'),
+            document.getElementById('link-avaliacao_estilo_vida'),
+            document.getElementById('link-cadastrar_frequencia'), 
+            document.getElementById('link-medicamento'),
+        ].filter(link => link); 
+
+        // 3. Adicionar listener de validação em TODOS os botões de ação
+        allActionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Se o href for '#' (valor padrão), impede a navegação
+                if (link.href.endsWith('#')) { 
+                    e.preventDefault(); 
+                    showTimedAlert("Selecione um paciente para continuar.");
+                }
+            });
+        });
+        
+        // 4. Adicionar listener para os links dos pacientes (para atualizar o URL)
+        const pacienteLinks = document.querySelectorAll('.paciente-link');
+        pacienteLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                const pacienteId = link.getAttribute('data-id');
+                const pacienteNome = link.getAttribute('data-nome');
+
+                document.getElementById('paciente-selecionado').textContent = pacienteNome;
+                
+                // 🚨 CHAMADA DA NOVA FUNÇÃO PARA ATUALIZAR TODOS OS LINKS 🚨
+                setActionLinks(pacienteId);
+
+                // Destaque visual
+                pacienteLinks.forEach(l => l.classList.remove('selecionado'));
+                link.classList.add('selecionado');
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

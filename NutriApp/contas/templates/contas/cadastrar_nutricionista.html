@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cadastrar Nutricionista{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Cadastrar Nutricionista</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <!-- Exibe erros gerais do formulário, como senhas não idênticas -->
+        {{ form.non_field_errors }}
+        
+        <div class="form-fields">
+            <p>
+                <label for="{{ form.nome.id_for_label }}">Nome:</label>
+                {{ form.nome }}
+                {{ form.nome.errors }}
+            </p>
+            <p>
+                <label for="{{ form.email.id_for_label }}">Email:</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </p>
+
+            <!-- NOVO GRUPO: Endereço (Rua/Avenida) e Número Lado a Lado -->
+            <div class="flex-group" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <!-- Endereço (agora é Rua/Avenida) -->
+                <p style="flex: 3; margin-bottom: 0;">
+                    <label for="{{ form.endereco.id_for_label }}">Rua/Avenida:</label>
+                    {{ form.endereco }}
+                    {{ form.endereco.errors }}
+                </p>
+                <!-- Número do Endereço -->
+                <p style="flex: 1; margin-bottom: 0;">
+                    <label for="{{ form.numero.id_for_label }}">Número:</label>
+                    {{ form.numero }}
+                    {{ form.numero.errors }}
+                </p>
+            </div>
+            <p>
+                <label for="{{ form.complemento.id_for_label }}">{{ form.complemento.label }}:</label>
+                    {{ form.complemento }}
+                    {{ form.complemento.errors }}
+                    {% if form.complemento.help_text %}
+                        <small style="color: gray;">{{ form.complemento.help_text }}</small>
+                    {% endif %}
+            </p>
+            <!-- NOVO CAMPO: Cidade -->
+            <p>
+                <label for="{{ form.cidade.id_for_label }}">Cidade:</label>
+                {{ form.cidade }}
+                {{ form.cidade.errors }}
+            </p>
+            
+            <!-- NOVO CAMPO: UF (Unidade Federativa) -->
+            <p>
+                <label for="{{ form.uf.id_for_label }}">UF:</label>
+                {{ form.uf }}
+                {{ form.uf.errors }}
+                <small style="color: gray;">{{ form.uf.help_text }}</small>
+            </p>
+            
+            <p>
+                <label for="{{ form.celular.id_for_label }}">Celular:</label>
+                {{ form.celular }}
+                {{ form.celular.errors }}
+            </p>
+            <p>
+                <label for="{{ form.crn.id_for_label }}">CRN:</label>
+                {{ form.crn }}
+                {{ form.crn.errors }}
+            </p>
+            
+            <!-- CAMPO SENHA - Inclui o help_text com as regras de complexidade -->
+            <p>
+                <label for="{{ form.senha.id_for_label }}">Senha:</label>
+                {{ form.senha }}
+                {{ form.senha.errors }}
+                <!-- Mostra as regras de complexidade definidas no forms.py -->
+                <small class="help-text" style="color: gray; display: block;">{{ form.senha.help_text }}</small>
+            </p>
+            
+            <!-- NOVO CAMPO - CONFIRMAR SENHA -->
+            <p>
+                <label for="{{ form.confirmacao_senha.id_for_label }}">Confirmar Senha:</label>
+                {{ form.confirmacao_senha }}
+                <!-- Exibe o erro se as senhas não coincidirem -->
+                {{ form.confirmacao_senha.errors }}
+            </p>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+        <!-- Mantive o seu link de Cancelar -->
+        <a href="{% url 'login' %}"><button type="button">Cancelar</button></a>
+    </form>
+</div>
+{% endblock %}

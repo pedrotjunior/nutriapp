@@ -1,0 +1,324 @@
+{% extends "base_nutricionista.html" %}
+{% load static %}
+
+{% block content %}
+    
+
+<form method="POST" action="{% url 'nutricionista:registro_alimentar' paciente_id=paciente_id %}">
+    {% csrf_token %}
+
+    <div class="form-container green-container">
+        <h2 class="top-title" style="margin-top: 0; padding-top: 0;">Registro Alimentar</h2>
+        <div class="meal-box">
+            <h3 class="meal-title">Café da Manhã</h3>
+            <table class="table table-bordered table-striped" id="tabela-cafe-manha">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>         <th style="width: 8%;">Quantidade</th>   <th style="width: 12%;">Unidade</th>    <th>Descrição do Alimento</th>          <th style="width: 5%;">Ação</th>        </tr>
+                </thead>
+                <tbody id="corpo-tabela-cafe-manha">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_cm_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_cm_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_cm_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_cm_1" class="form-control" placeholder="Ex: Pão, café com leite"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-cafe-manha">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+
+        <div class="meal-box">
+            <h3 class="meal-title">Lanche da Manhã</h3>
+            <table class="table table-bordered table-striped" id="tabela-lanche-manha">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>
+                        <th style="width: 8%;">Quantidade</th>
+                        <th style="width: 12%;">Unidade</th>
+                        <th>Descrição do Alimento</th>
+                        <th style="width: 5%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-lanche-manha">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_lm_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_lm_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_lm_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_lm_1" class="form-control" placeholder="Ex: Fruta ou iogurte"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-lanche-manha">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+
+        <div class="meal-box">
+            <h3 class="meal-title">Almoço</h3>
+            <table class="table table-bordered table-striped" id="tabela-almoco">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>
+                        <th style="width: 8%;">Quantidade</th>
+                        <th style="width: 12%;">Unidade</th>
+                        <th>Descrição do Alimento</th>
+                        <th style="width: 5%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-almoco">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_al_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_al_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_al_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_al_1" class="form-control" placeholder="Ex: Arroz, feijão e salada"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-almoco">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+
+        <div class="meal-box">
+            <h3 class="meal-title">Lanche da Tarde</h3>
+            <table class="table table-bordered table-striped" id="tabela-lanche-tarde">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>
+                        <th style="width: 8%;">Quantidade</th>
+                        <th style="width: 12%;">Unidade</th>
+                        <th>Descrição do Alimento</th>
+                        <th style="width: 5%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-lanche-tarde">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_lt_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_lt_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_lt_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_lt_1" class="form-control" placeholder="Ex: Fruta e iogurte"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-lanche-tarde">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+
+        <div class="meal-box">
+            <h3 class="meal-title">Jantar</h3>
+            <table class="table table-bordered table-striped" id="tabela-jantar">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>
+                        <th style="width: 8%;">Quantidade</th>
+                        <th style="width: 12%;">Unidade</th>
+                        <th>Descrição do Alimento</th>
+                        <th style="width: 5%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-jantar">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_ja_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_ja_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_ja_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_ja_1" class="form-control" placeholder="Ex: Peixe e legumes"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-jantar">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+        
+        <div class="meal-box">
+            <h3 class="meal-title">Lanche da Noite</h3>
+            <table class="table table-bordered table-striped" id="tabela-lanche-noite">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Hora</th>
+                        <th style="width: 8%;">Quantidade</th>
+                        <th style="width: 12%;">Unidade</th>
+                        <th>Descrição do Alimento</th>
+                        <th style="width: 5%;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-lanche-noite">
+                    <tr class="registro-item">
+                        <td><input type="time" name="hora_ln_1" class="form-control"></td> 
+                        <td><input type="number" name="quantidade_ln_1" class="form-control" value="1" min="0.1" step="0.1"></td>
+                        <td>
+                            <select name="unidade_ln_1" class="form-control unidade-select">
+                                <option value="unidade">Unidade</option>
+                                <option value="colher_sopa">Colher de Sopa</option>
+                                <option value="colher_sobremesa">Colher de Sobremesa</option>
+                                <option value="fatia">Fatia</option>
+                                <option value="xicara">Xícara</option>
+                                <option value="copo_americano">Copo Americano</option>
+                                <option value="g">Gramas (g)</option>
+                                <option value="ml">Mililitros (ml)</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="descricao_ln_1" class="form-control" placeholder="Ex: Iogurte, chá ou leite"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-item" title="Remover item">&times;</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-sm add-item-btn" data-target="corpo-tabela-lanche-noite">
+                <span class="fw-bold">+</span> Adicionar Item
+            </button>
+        </div>
+
+    </div> 
+    
+    <div class="text-center mt-4 mb-5">
+        <button type="submit" class="btn btn-success btn-lg">💾 Salvar Registro Diário</button>
+    </div>
+    
+</form> 
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let itemIdCounter = 2; 
+
+        // 1. Função para remover a linha
+        const removeRow = (button) => {
+            const row = button.closest('tr');
+            const tbody = row.closest('tbody');
+            
+            if (tbody.querySelectorAll('.registro-item').length > 1) {
+                row.remove();
+            } else {
+                alert("É necessário manter pelo menos uma linha de registro.");
+            }
+        };
+        
+        // 2. Função para adicionar uma nova linha
+        const addRow = (tbodyId) => {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+
+            const templateRow = tbody.querySelector('.registro-item') || tbody.lastElementChild;
+            if (!templateRow) return;
+
+            const newRow = templateRow.cloneNode(true);
+
+            // Define o prefixo da refeição a partir do ID do TBody
+            let prefix = 'refeicao';
+            if (tbodyId.includes('cafe-manha')) prefix = 'cm';
+            else if (tbodyId.includes('lanche-manha')) prefix = 'lm'; 
+            else if (tbodyId.includes('almoco')) prefix = 'al';
+            else if (tbodyId.includes('lanche-tarde')) prefix = 'lt'; 
+            else if (tbodyId.includes('jantar')) prefix = 'ja'; 
+            else if (tbodyId.includes('lanche-noite')) prefix = 'ln';
+
+            // Atualiza os atributos 'name' e limpa os valores clonados (Inputs)
+            newRow.querySelectorAll('input').forEach(input => {
+                const type = input.name.split('_')[0]; 
+                
+                input.name = `${type}_${prefix}_${itemIdCounter}`;
+                
+                if (input.type === 'text') {
+                    input.value = '';
+                } else if (input.type === 'number') {
+                    input.value = '1'; 
+                } else if (input.type === 'time') {
+                    input.value = ''; 
+                }
+            });
+            
+            // Atualiza e limpa os campos SELECT
+            newRow.querySelectorAll('select.unidade-select').forEach(select => {
+                select.name = `unidade_${prefix}_${itemIdCounter}`;
+                select.selectedIndex = 0; 
+            });
+
+
+            // Adiciona o listener de remoção ao novo botão CLONADO
+            newRow.querySelector('.remove-item').addEventListener('click', (e) => {
+                removeRow(e.currentTarget);
+            });
+
+            tbody.appendChild(newRow);
+            itemIdCounter++; 
+        };
+
+        // 3. Inicialização
+        document.querySelectorAll('.meal-box .remove-item').forEach(button => {
+             button.addEventListener('click', (e) => {
+                removeRow(e.currentTarget);
+            });
+        });
+
+        document.querySelectorAll('.add-item-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const tbodyId = button.getAttribute('data-target');
+                addRow(tbodyId);
+            });
+        });
+    });
+    </script>
+{% endblock %}

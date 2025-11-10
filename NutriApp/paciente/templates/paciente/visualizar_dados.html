@@ -1,0 +1,92 @@
+{% extends "base_paciente.html" %}
+{% load static %}
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+<h2 class="mb-5 text-primary fw-bold">Bem-vindo(a), {{ paciente.user.first_name|default:paciente.nome }}!</h2>
+
+<div class="row g-4">
+    
+    <!-- CARD 1: Dados do Perfil -->
+    <div class="col-lg-6">
+        <div class="card shadow-lg h-100 border-0 rounded-4">
+            <div class="card-body p-4">
+                <h3 class="card-title text-secondary mb-3 d-flex align-items-center"><i class="bi bi-person-circle me-2"></i> Meu Perfil</h3>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <small class="text-muted">Nome Completo:</small><br>
+                        <strong>{{ paciente.nome }}</strong>
+                    </li>
+                    <li class="list-group-item">
+                        <small class="text-muted">Nutricionista Responsável:</small><br>
+                        <strong>{{ paciente.nutricionista.nome|default:"Não Atribuído" }}</strong>
+                    </li>
+                    <li class="list-group-item">
+                        <small class="text-muted">Email:</small><br>
+                        <strong>{{ paciente.user.email }}</strong>
+                    </li>
+                    <li class="list-group-item">
+                        <small class="text-muted">Data de Nascimento:</small><br>
+                        <strong>{{ paciente.data_nascimento|date:"d/m/Y"|default:"N/A" }}</strong>
+                    </li>
+                </ul>
+
+                <div class="mt-4 text-end">
+                     <!-- Futuramente, link para edição de perfil -->
+                     <a href="#" class="btn btn-outline-secondary btn-sm">Editar Perfil (Em Breve)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CARD 2: Resultados e Ações -->
+    <div class="col-lg-6">
+        <div class="card shadow-lg h-100 border-0 rounded-4 bg-light">
+            <div class="card-body p-4">
+                <h3 class="card-title text-secondary mb-4 d-flex align-items-center"><i class="bi bi-bar-chart-line-fill me-2"></i> Meus Resultados</h3>
+                
+                <p class="text-muted">Acompanhe seu progresso e visualize o plano alimentar e os registros de consumo definidos pelo seu nutricionista.</p>
+
+                <div class="d-grid gap-3">
+                    <a href="{% url 'paciente:resultados_medidas' %}" class="btn btn-success btn-lg shadow-sm">
+                        <i class="bi bi-ruler me-2"></i> Ver Comparação de Medidas
+                    </a>
+                    <a href="#" class="btn btn-outline-success btn-lg" disabled>
+                        <i class="bi bi-book me-2"></i> Plano Alimentar (Em Breve)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seção de Registros Diários Recentes -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="mb-4 text-secondary d-flex align-items-center"><i class="bi bi-calendar-check me-2"></i> Últimos Registros Diários</h3>
+        
+        {% if registros_diarios %}
+        <div class="list-group shadow-sm rounded-4 overflow-hidden">
+            {% for registro in registros_diarios %}
+                <a href="{% url 'paciente:detalhe_registro_diario' registro.id %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center">
+                    <div class="fw-bold">
+                        Registro de {{ registro.data|date:"d/m/Y" }}
+                    </div>
+                    <span class="badge bg-primary rounded-pill">
+                        Ver Detalhes <i class="bi bi-chevron-right ms-1"></i>
+                    </span>
+                </a>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p class="alert alert-warning border-0 rounded-3">Nenhum registro diário encontrado ainda.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

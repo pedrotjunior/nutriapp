@@ -1,0 +1,1377 @@
+body { 
+    height: 100%;
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    background: #f4f4f4; 
+}
+    
+.box-central { 
+    background: white; 
+    padding: 30px; 
+    border: 3px solid #3c8647; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    text-align: center; 
+    width: 400px; 
+} 
+
+/* --- Navegação e Layout --- */
+nav { 
+    background: #3c8647; 
+    padding: 1em; 
+    display: flex; 
+    align-items: center; 
+} 
+
+nav .logo { 
+    height: 80px; 
+    margin-right: 20px; 
+} 
+
+nav .brand{ 
+    flex: 1; 
+    text-align: center; 
+    color: white; 
+    font-size: 28px; 
+    font-weight: bold; 
+    letter-spacing: 2px; 
+} 
+
+nav a { 
+    color: white; 
+    margin-right: 15px; 
+    text-decoration: none; 
+    font-weight: bold; 
+} 
+
+nav a:hover { 
+    text-decoration: underline 
+} 
+
+main { 
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
+} 
+
+footer { 
+    background: #3c8647; 
+    color: white; 
+    text-align: center; 
+    padding: 1em; 
+    margin-top: auto; 
+} 
+
+/* --- Login e Formulário Geral --- */
+.login-container { 
+    max-width: 400px; 
+    margin: 50px auto; 
+    background: #f8f9fa; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+} 
+
+.login-container h2 { 
+    text-align: center; 
+    margin-bottom: 10px; 
+    color: #2c3e50; 
+} 
+
+.login-container p { 
+    text-align: center; 
+    margin-bottom: 20px; 
+    color: #555; 
+} 
+
+.login-container form { 
+    display: flex; 
+    flex-direction: column; 
+} 
+
+.login-container button { 
+    background: #3c8647; 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    margin-top: 10px; 
+    width: 100%; 
+} 
+
+.login-container button:hover { 
+    background: #2e6a39; 
+} 
+
+.login-links{ 
+    margin-top: 15px; 
+    display: flex; 
+    justify-content: center; 
+    gap: 10px; font-size: 14px; 
+} 
+
+.login-links a { 
+    color: #3c8647; 
+    text-decoration: none; 
+    font-weight: bold; 
+} 
+
+.login-links a:hover { 
+    text-decoration: underline; 
+} 
+
+.form-container { 
+    /* ALTERAÇÃO: Trocamos 'width: 400px' por um 'max-width' e uma porcentagem maior. */
+    max-width: 600px; /* Aumenta o limite máximo de largura do container (para deixá-lo mais largo) */
+    width: 100%; /* Ocupa 90% da tela, mas não mais que 900px (ótimo para responsividade) */
+    
+    /* Mantenha a centralização */
+    margin: 50px auto; 
+    
+    padding: 20px; 
+    border: 5px solid #3c8647; 
+    border-radius: 15px; 
+    background: #f9f9f9; 
+    
+    /* Nota: 'text-align: center;' centraliza o texto. Se você quiser que os rótulos do formulário fiquem à esquerda, remova ou ajuste isso. */
+    text-align: left; /* Sugestão: Alinhar o texto à esquerda para formulários */
+}
+
+.form-container h2 { 
+    color: #3c8647; 
+} 
+
+button { 
+    background: #3c8647; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
+
+button:hover { 
+    background: #2f6b38; 
+} 
+
+.form-fields p{ 
+    margin: 12px 0; 
+    text-align: left; 
+} 
+
+.form-fields label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; color:#333 
+} 
+
+.form-fields input{ 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+} 
+
+.link-voltar a { 
+    text-decoration: none;
+    color: #3c8647; 
+} 
+
+.link-voltar a:hover { 
+    color: #2e6a39; 
+} 
+
+.form-fields input, .form-fields select, .form-fields textarea { 
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+}
+
+/* === HEADER DO NUTRICIONISTA === */ 
+.nutri-header {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    background-color: #3c8647; 
+    color: white !important; 
+    padding: 10px 30px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 0px; 
+    border-radius: 0;
+}
+
+.nutri-header strong {
+    color: white !important;
+}
+
+.nutri-nome { 
+    font-size: 16px; 
+    font-weight: 500; 
+} 
+
+/* === LINKS PRINCIPAIS === */ 
+.nutri-links { 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+    background:#3c8647; 
+    padding: 10px 0; 
+} 
+
+.nutri-links a { 
+    color: white; 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.3s; 
+} 
+
+.nutri-links a:hover { 
+    text-decoration: underline; 
+} 
+
+/* === LAYOUT GERAL === */ 
+.nutri-layout { 
+    display: flex; 
+    min-height: calc(100vh - 180px); 
+} 
+
+/* === CONTEÚDO PRINCIPAL === */ 
+.nutri-main { 
+    margin-left: 240px; 
+    padding: 30px; flex-grow: 1; 
+} 
+
+/* === RESPONSIVO === */ 
+@media (max-width: 768px) { 
+    .nutri-sidebar { 
+        position: static; 
+        width: 100%; 
+        height: auto; 
+        border-right: none; 
+        border-bottom: 2px solid #ccc; 
+    } 
+    .nutri-main { 
+        margin-left: 0; 
+    } 
+    .nutri-links { 
+        flex-direction: column; 
+        align-items: center; 
+    } 
+    .nutri-header { 
+        justify-content: center; 
+        text-align: center; 
+    } 
+}
+
+/* === Estilo para botões Sim/Não na mesma linha === */
+.form-fields .radio {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    margin: 5px 0;
+}
+
+.form-fields .radio label {
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+input[type="radio"] {
+    accent-color: #3c8647; 
+}
+
+.form-fields ul, .form-fields div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 5px;
+}
+
+.peso-ideal { 
+    color: green; 
+    font-weight: bold; 
+}
+.imc-display {
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    width: fit-content;
+    margin-top: 5px;
+}
+
+/* --- NOVOS ESTILOS PARA O FORMULÁRIO DE SELEÇÃO DE PACIENTE --- */
+
+.selecao-container {
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    width: 100%; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.selecao-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #3c8647; 
+}
+
+.selecao-form .form-group p {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-bottom: 20px;
+}
+
+.selecao-form label {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 8px; 
+    display: block; 
+}
+
+.selecao-form select {
+    width: 250px; 
+    padding: 10px 15px;
+    border: 2px solid #3c8647;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.btn-proximo {
+    background: #3c8647; 
+    color: white; 
+    border: none; 
+    padding: 10px 30px; 
+    border-radius: 8px; 
+    cursor: pointer;
+    font-size: 1.1em;
+}
+.btn-proximo:hover {
+    background: #2f6b38; 
+}
+
+/* --- ESTILOS MODIFICADOS PARA O TEMPLATE DE FREQUÊNCIA --- */
+
+.frequencia-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.frequencia-container .paciente-info {
+    max-width: 600px; 
+    width: 100%;
+    text-align: left; 
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.frequencia-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #3c8647; 
+}
+
+.frequencia-form {
+    max-width: 600px; 
+    width: 100%;
+    margin: 0 auto;
+}
+
+.frequencia-form .form-fields p {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    margin-bottom: 15px;
+    width: 100%; 
+}
+
+.frequencia-form label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    flex-basis: 50%; 
+    text-align: left;
+    margin-right: 10px; 
+    display: inline-block; 
+}
+
+.frequencia-form select {
+    flex-grow: 1; 
+    max-width: 180px; 
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.frequencia-form .form-row {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start; 
+    margin-bottom: 12px;
+    padding: 0 10px;
+    width: 100%;
+}
+
+.frequencia-form .form-row .main-label {
+    width: 150px; 
+    min-width: 150px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1em;
+    color: #333;
+    margin-right: 0px; 
+}
+
+.frequencia-form .freq-field {
+    width: 140px; 
+    margin-right: 20px; 
+}
+
+.frequencia-form .freq-field select {
+    width: 100%;
+    padding: 8px 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.frequencia-form .qtd-field {
+    display: flex; 
+    align-items: center;
+}
+
+.frequencia-form .qtd-field label {
+    font-size: 0.9em;
+    font-weight: normal;
+    margin-right: 5px; 
+    white-space: nowrap; 
+}
+
+.frequencia-form .qtd-field select {
+    width: 80px; 
+    padding: 8px 5px;
+    border: 1px solid #3c8647; 
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* ======================================================= */
+/* CLASSES PARA FORÇAR LAYOUT VERTICAL (UM CAMPO POR LINHA) */
+/* ======================================================= */
+
+.campo-bloco-container {
+    display: block; 
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.campo-bloco-container label {
+    display: block; 
+    width: auto; 
+    text-align: left;
+    margin-bottom: 5px; 
+    font-weight: bold;
+}
+
+.campo-bloco-container input,
+.campo-bloco-container select,
+.campo-bloco-container textarea {
+    display: block; 
+    width: 100% !important; 
+    margin-bottom: 15px; 
+    box-sizing: border-box;
+}
+
+.quebra-coluna-vertical > div,
+.quebra-coluna-vertical {
+    display: block !important; 
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======================================================= */
+/* CLASSE PARA LAYOUT HORIZONTAL (RÓTULO E INPUT NA MESMA LINHA) */
+/* ======================================================= */
+
+.campo-inline {
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 12px; 
+    width: 100%;
+}
+
+.campo-inline label {
+    width: 120px; 
+    min-width: 120px; 
+    text-align: left; 
+    margin-right: 10px; 
+    font-weight: bold;
+    display: block; 
+}
+
+.campo-inline input,
+.campo-inline select,
+.campo-inline textarea {
+    flex-grow: 1; 
+    max-width: 300px; 
+    padding: 8px;
+    box-sizing: border-box;
+    display: block; 
+}
+
+/* --- Estilos Gerais (Repetição/Sobrescrita) --- */
+.form-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.nutri-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #e0f2f1; 
+    border-left: 5px solid #00796b; 
+    border-radius: 4px;
+}
+
+/* --- Estilo para Campos Alinhados (Label ao lado) - Versão Final --- */
+.form-group-aligned {
+    display: flex; 
+    align-items: center;
+    /* CHAVE: Espaço entre cada campo (Nome, Data, Endereço, etc.) */
+    margin-bottom: 20px; 
+}
+
+/* Define a largura dos Labels para o alinhamento */
+.form-group-aligned label {
+    flex: 0 0 180px; 
+    text-align: right; 
+    padding-right: 15px; 
+    font-weight: bold;
+}
+
+/* Garante que o input preencha o espaço restante e fique na mesma linha */
+.form-group-aligned input,
+.form-group-aligned select {
+    flex: 1; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: auto;
+}
+
+/* --- Estilo para Campos Empilhados (Motivo da Consulta) - Versão Final --- */
+.form-group-stacked {
+    display: flex;
+    flex-direction: column; 
+    margin-top: 20px;
+    /* CHAVE: Espaço após o campo Motivo da Consulta e antes do botão */
+    margin-bottom: 30px; 
+}
+
+.form-group-stacked label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.form-group-stacked textarea {
+    min-height: 150px; 
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilo do Botão Salvar */
+.btn-salvar {
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.btn-salvar:hover {
+    background-color: #45a049;
+}
+
+.form-container .form-group-aligned {
+    display: flex; 
+    align-items: center;
+    margin-bottom: 20px; 
+}
+
+/* Labels Alinhados */
+.form-container .form-group-aligned label {
+    flex: 0 0 180px; 
+    text-align: right; 
+    padding-right: 15px; 
+    font-weight: bold;
+}
+
+/* Estilo para agrupar campos inline (Endereço/Nº e Cidade/UF) */
+.campo-grupo-inline {
+    display: flex;
+    flex: 1; 
+    gap: 10px; 
+    align-items: center; /* Garante alinhamento vertical */
+}
+
+/* Garante que o campo Endereço/Cidade ocupe a maior parte do espaço */
+.campo-endereco,
+.campo-cidade {
+    flex-grow: 3; /* Faz este campo ser 3x maior que o campo ao lado */
+}
+
+/* Garante que o campo Número/UF ocupe uma porção menor do espaço */
+.campo-numero,
+.campo-uf {
+    /* Mantenha o flex-grow menor, mas garanta um tamanho MÍNIMO adequado */
+    flex-grow: 1; 
+    /* Aumente o limite de largura para garantir espaço para duas letras e a seta do select */
+    min-width: 60px; /* Um valor seguro para UF */
+    max-width: 80px;
+}
+
+/* Garante que os inputs dentro desses novos containers preencham o espaço */
+.campo-grupo-inline input, 
+.campo-grupo-inline select {
+    width: 100%; /* Isso faz com que o SELECT preencha 100% do .campo-uf */
+    box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+/* Alinhamento dos inputs dentro do form-group-aligned */
+.form-group-aligned input,
+.form-group-aligned select,
+/* Adicionar os novos containers aqui para garantir que eles se alinhem */
+.form-group-aligned .campo-grupo-inline { 
+    flex: 1; /* Todos ocupam o espaço restante de forma uniforme */
+}
+
+/* Container para alinhar os botões */
+.action-links-container {
+    display: flex; /* Habilita o Flexbox */
+    justify-content: space-between; /* Distribui o espaço uniformemente entre os links */
+    gap: 15px; /* Adiciona um pequeno espaço entre os botões */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    /* Ajuste a largura máxima se necessário, ou deixe 100% */
+}
+
+/* Estilização básica dos links/botões */
+.action-link {
+    /* Define o tamanho dos botões para que ocupem 1/3 do espaço disponível, menos o gap */
+    flex-grow: 1; 
+    text-align: center;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none; /* Remove sublinhado padrão */
+    font-weight: bold;
+    color: #fff; /* Cor do texto */
+    transition: background-color 0.3s ease;
+}
+
+/* Cores específicas para diferenciar (Opcional) */
+.button-antropo {
+    background-color: #007bff; /* Azul */
+}
+.button-antropo:hover {
+    background-color: #0056b3;
+}
+
+.button-registro {
+    background-color: #28a745; /* Verde */
+}
+.button-registro:hover {
+    background-color: #1e7e34;
+}
+
+.button-frequencia {
+    background-color: #ffc107; /* Amarelo */
+    color: #333; /* Texto escuro para contraste */
+}
+.button-frequencia:hover {
+    background-color: #e0a800;
+}
+
+/* 1. CENTRALIZAÇÃO E LIMITE DE LARGURA DO BLOCO PRINCIPAL */
+/* Esta regra garante que o contêiner 'form-container' tenha uma largura razoável e esteja centralizado */
+.centralizar-e-limitar {
+    /* Define uma largura máxima para que não ocupe a tela toda */
+    max-width: 500px; 
+    /* Centraliza o bloco horizontalmente */
+    margin-left: auto;
+    margin-right: auto;
+    /* Adiciona um espaço superior, se o 'mt-5' não for suficiente */
+    margin-top: 3rem; 
+    padding: 15px;
+}
+
+/* 2. ESTILO PARA A LISTA COM BARRA DE ROLAGEM */
+/* Aplica as propriedades de altura e scroll na lista de pacientes */
+.lista-com-scroll {
+    /* Altura máxima para mostrar cerca de 2-3 itens de lista padrão do Bootstrap */
+    max-height: 120px; 
+    /* Adiciona a barra de rolagem vertical quando o conteúdo excede a altura */
+    overflow-y: scroll;
+    /* Esconde a barra de rolagem horizontal (caso apareça sem querer) */
+    overflow-x: hidden; 
+    /* Opcional: Adiciona uma borda leve para separar a lista */
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+}
+
+/* 3. CENTRALIZAÇÃO DE TEXTO DO PACIENTE SELECIONADO */
+/* Usando o Bootstrap `text-center` é mais prático, mas se precisar de mais controle: */
+/*
+#paciente-selecionado-wrapper {
+    text-align: center;
+}
+*/
+
+.lista-pacientes {
+    border: 2px solid #2ecc71; /* borda verde */
+    border-radius: 8px;
+    padding: 10px 15px;
+    width: 320px; /* reduzido */
+    background-color: #f9f9f9;
+    max-height: 180px; /* controla altura */
+    overflow-y: auto; /* adiciona barra de rolagem vertical */
+}
+
+/* remove bolinhas e espaçamentos padrão */
+.lista-pacientes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* adiciona linha embaixo de cada item */
+.lista-pacientes li {
+    border-bottom: 1px solid #2ecc71;
+    padding: 6px 0;
+}
+
+/* remove linha do último item */
+.lista-pacientes li:last-child {
+    border-bottom: none;
+}
+
+* Nome do paciente no topo */
+.paciente-nome {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 25px; /* espaço abaixo do nome */
+    color: #2E7D32;
+}
+
+/* Formulário geral */
+form#consultaForm {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+}
+
+/* Seções do formulário */
+.form-section {
+    margin-bottom: 25px; /* espaço entre seções */
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Grid de inputs */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px; /* aumenta o espaço entre os inputs */
+}
+
+/* Inputs individuais */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px; /* aumenta o espaçamento interno */
+    border: 1px solid #4CAF50;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Botão de submit */
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
+
+/* Resultados IMC */
+.resultados p {
+    font-weight: bold;
+    margin: 8px 0; /* aumenta o espaço entre linhas de resultado */
+}
+
+#imc-display {
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 5px;
+    font-weight: bold;
+    color: #fff;
+}
+
+    /* ---------------------------------------------------------------------- */
+    /* Estilos Essenciais para o Layout da Imagem (você deve adaptar/completar) */
+    /* ---------------------------------------------------------------------- */
+    
+    .container-antropometria {
+        max-width: 900px; /* Largura centralizada típica de um formulário */
+        margin: 20px auto;
+        padding: 0 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Título Principal */
+    .titulo-principal {
+        font-size: 1.8em;
+        color: #38761d; /* Verde escuro para o título principal */
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    /* Estilização dos Blocos de Conteúdo (Headers coloridos) */
+    .card-section {
+        padding: 10px 15px;
+        margin-bottom: 0; /* Os bodies vão se juntar aos headers */
+        border-radius: 0;
+        text-align: center;
+    }
+    
+    .section-title {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #fff; /* Texto branco nas barras coloridas */
+    }
+
+    /* Cores das Seções */
+    .medidas-antropometricas-header { background-color: #b6d7a8; /* Verde claro */ }
+    .dobras-cutaneas-header         { background-color: #a4c2f4; /* Azul claro */ }
+    .peso-altura-header             { background-color: #fce5cd; /* Laranja/Pêssego claro */ }
+    .Resultado-header               { background-color: #d30b0b; /* Rosa claro */ }
+
+    /* Estilo dos Corpos das Seções */
+    .medidas-antropometricas-body,
+    .dobras-cutaneas-body,
+    .peso-altura-body,
+    .observacoes-body {
+        background-color: #ffffff; /* Fundo branco ou levemente diferente */
+        border: 1px solid #ccc; /* Borda sutil */
+        padding: 15px;
+        margin-bottom: 20px;
+        border-top: none; /* Remove a borda superior para juntar com o header */
+    }
+    .medidas-antropometricas-body { border-bottom: 3px solid #b6d7a8; }
+    .dobras-cutaneas-body         { border-bottom: 3px solid #a4c2f4; }
+    .peso-altura-body             { border-bottom: 3px solid #fce5cd; }
+    .observacoes-body             { border-bottom: 3px solid #f4cccc; }
+
+    /* Layout em Grade para os campos (2 colunas) */
+    .form-grid-2-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px 15px; /* Espaçamento entre campos */
+    }
+    .form-group-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Estilo para as labels */
+    .form-group-item label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+        /* Alinhamento da label acima do campo, como no seu código original.
+           Na imagem, as labels não aparecem, então vamos escondê-las, mas mantê-las por acessibilidade. */
+        display: none; /* Esconder labels para ficar mais parecido com a imagem */
+    }
+
+    /* Estilo dos campos de input */
+    .form-group-item input[type="number"],
+    .form-group-item input[type="text"],
+    .form-group-item textarea {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width:50%;
+        box-sizing: border-box; /* Inclui padding e borda na largura total */
+    }
+
+    /* Layout especial para Peso/Altura e Observações */
+    .secoes-inferiores-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .coluna-peso-altura, .coluna-observacoes {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Ajuste para o layout de 2 colunas dentro da seção Peso/Altura */
+    .form-grid-2-col-narrow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    /* Campo Observações (Textarea) deve ocupar a largura total da sua coluna */
+    .coluna-observacoes .observacoes-body {
+        flex-grow: 1; /* Para esticar e igualar a altura do lado Peso/Altura, se necessário */
+    }
+    .coluna-observacoes textarea {
+        min-height: 100px; /* Altura mínima para o textarea */
+    }
+    .full-width {
+        width: 100%;
+    }
+
+    /* Botão Salvar */
+    .btn-salvar-consulta {
+        background-color: #38761d; /* Verde escuro */
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        width: 100%;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-salvar-consulta:hover {
+        background-color: #274e13;
+    }
+
+    /* Ocultar labels para simular a imagem, mantendo apenas os placeholders/inputs */
+    .form-group-item label {
+        display: none;
+    }
+
+/* Container de Grid Principal (2 Colunas) */
+.form-grid-2-col-compact {
+    display: grid !important; 
+    grid-template-columns: 1fr 1fr !important; 
+    gap: 10px; 
+}
+
+/* Container de Cada Campo (Nome, Input, Unidade) */
+.form-group-item.triple-layout {
+    display: flex !important; /* CHAVE: Alinha lado a lado */
+    flex-direction: row !important;
+    align-items: center !important; 
+    gap: 5px; 
+}
+
+/* Estilo para os Rótulos (Nome:) */
+.form-group-item.triple-layout label {
+    display: block !important; 
+    width: 65px !important; /* Largura fixa para alinhar os inputs */
+    text-align: right !important;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+
+/* Estilo para os Inputs (Curto) */
+.form-group-item.triple-layout input {
+    width: 70px !important; /* Largura para 5-6 caracteres */
+    padding: 3px !important; 
+    text-align: right !important;
+    flex-shrink: 0 !important; 
+    flex-grow: 0 !important;
+}
+
+/* Estilo para a Unidade de Medida (mm) */
+.form-group-item .unit {
+    margin-left: 0; 
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+/* Container de Grid para Dobras (seção com fundo azul claro) */
+.dobras-cutaneas-body.form-grid-2-col-compact {
+    display: grid !important; 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+}
+
+/* Aplica o layout lado a lado */
+.dobras-cutaneas-body .form-group-item.triple-layout {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px;
+}
+
+/* Estilo para os Rótulos das Dobras */
+.dobras-cutaneas-body .form-group-item.triple-layout label {
+    display: block !important; 
+    /* Mais largura para acomodar 'Subescapular:' ou 'Tricipital:' */
+    width: 90px !important; 
+    min-width: 90px !important;
+    text-align: right !important;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+
+/* Estilo para os Inputs das Dobras (Mantendo o tamanho pequeno) */
+.dobras-cutaneas-body .form-group-item.triple-layout input {
+    width: 70px !important; 
+    padding: 3px !important; 
+    text-align: right !important;
+    flex-shrink: 0 !important; 
+    flex-grow: 0 !important;
+}
+
+/* Estilo para a Unidade de Medida (mm) */
+.dobras-cutaneas-body .form-group-item .unit {
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+
+/* CORREÇÃO: CSS Consolidado para a Seção Peso e Altura */
+
+/* Container da Coluna e Corpo - Garante 100% da Largura */
+.coluna-peso-altura,
+.peso-altura-body.form-stacked-compact {
+    width: 100%; /* Garante que os containers se expandam */
+    box-sizing: border-box; /* Essencial para que o padding não quebre o 100% */
+    margin-bottom: 20px;
+}
+
+/* Container do Item Compacto (Peso: [Input] kg) */
+.peso-altura-body .form-group-item.triple-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start; 
+    gap: 5px;
+    margin: 0 !important;
+}
+
+/* CORREÇÃO CRÍTICA: Estilo para os Rótulos (Peso:, Altura:) */
+.peso-altura-body .form-group-item.triple-layout label {
+    /* Mantenha uma largura FIXA e PEQUENA (60px) para alinhar o layout compacto. */
+    width: 60px !important; 
+    min-width: 60px !important;
+    text-align: right !important;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+
+/* Estilo para os Inputs de Peso e Altura */
+.peso-altura-body .form-group-item.triple-layout input {
+    width: 80px !important; 
+    padding: 3px !important; 
+    text-align: right !important;
+    flex-shrink: 0 !important; 
+    flex-grow: 0 !important;
+}
+.resultados-gerais {
+    max-width: 100%; /* Ocupa a largura máxima do formulário principal */
+    margin: 20px 0 30px 0; /* Espaçamento: 20px acima, 30px abaixo do botão */
+    padding: 15px;
+    background-color: #e6e6e6; /* Fundo cinza suave para destacar */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Container para agrupar IMC e Peso Ideal lado a lado (na mesma linha) */
+.resultados-gerais .resultado-linha {
+    display: flex;
+    justify-content: flex-start; /* Alinha os itens à esquerda */
+    align-items: center;
+    gap: 30px; /* Espaço entre Peso Ideal e IMC */
+    margin-bottom: 5px; /* Espaço entre a linha de resultados e a classificação */
+}
+
+/* Estilo dos itens de resultado (Peso Ideal, IMC) */
+.resultados-gerais .resultado-item {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilo da Classificação do IMC (linha abaixo) */
+.resultados-gerais .resultado-classificacao {
+    margin: 0;
+    font-size: 1em;
+    color: #555;
+    font-style: italic;
+}
+
+/* Estilo para os valores reais (onde o JS vai injetar os números) */
+#peso-ideal-display,
+#imc-display,
+#imc-classificacao-display {
+    font-weight: normal;
+    color: #38761d; /* Verde forte */
+    margin-left: 5px;
+}
+
+/* CONTAINER PRINCIPAL DA ÁREA DE RESULTADOS */
+.resultado-body-grid {
+    padding: 15px;
+    background-color: #f0f0f0; /* Fundo leve para destacar */
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+/* LINHA SUPERIOR: PESO IDEAL e IMC */
+.resultado-linha-flex {
+    display: flex; /* CHAVE: Coloca os itens lado a lado */
+    justify-content: flex-start;
+    gap: 30px; /* Espaço entre Peso Ideal e IMC */
+    margin-bottom: 10px;
+}
+
+/* ESTILO DOS ITENS INDIVIDUAIS (Peso Ideal: --) */
+.resultado-item {
+    /* CHAVE: Garante que o texto 'Peso Ideal:' e o valor '--' fiquem em linha */
+    display: flex; 
+    align-items: center;
+    gap: 5px; /* Espaço entre a label e o valor */
+    
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ESTILO DA LINHA DE CLASSIFICAÇÃO */
+.resultado-linha-classificacao {
+    display: block; /* Garante que a classificação ocupe uma linha inteira */
+}
+
+.resultado-classificacao {
+    display: flex; /* Alinha 'Classificação IMC:' e o resultado em linha */
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    font-size: 1em;
+    color: #555;
+}
+
+/* ESTILO DOS VALORES (SPANS) */
+#peso-ideal-display,
+#imc-display,
+#imc-classificacao-display {
+    font-weight: normal; /* O valor deve ser menos destacado que a label */
+    color: #38761d; /* Cor de destaque (Verde) */
+}
+
+
+
+/* Garante que o alerta se posicione corretamente */
+.custom-alert {
+    display: none; 
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background-color: #ffc107; 
+    color: #333;
+    border: 1px solid #ff9800;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1050; 
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.custom-alert.visible {
+    opacity: 1;
+}
+
+/* No seu arquivo CSS (ex: static/css/estilos.css) */
+.top-title {
+    /* Garante que fique no topo e centralizado */
+    text-align: center;
+    margin-top: 0; /* Remove margem superior se houver */
+    padding-top: 10px; /* Adiciona um pequeno padding interno, se necessário */
+    margin-bottom: 20px; /* Espaço entre o título e o formulário */
+    /* Outros estilos: */
+    font-size: 2.5em; 
+    color: #007bff; /* Exemplo de cor azul */
+}
+
+/* Também verifique o bloco de conteúdo principal */
+/* Ajuste se o bloco 'content' do base.html estiver adicionando muito espaço */
+#content-wrapper { /* Use o ID ou classe do container principal do seu template base */
+    padding-top: 0 !important; /* Remove padding superior do container geral */
+}
+
+/* Estilo para a box de refeição individual */
+.meal-box {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #ffffff; /* Fundo branco dentro do contêiner verde */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.meal-title {
+    font-size: 1.5rem;
+    color: #28a745; /* Cor verde para o título da refeição */
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Garante que o botão de remover fique bom */
+.remove-item {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Garante que os campos de input na tabela se ajustem */
+#tabela-cafe-manha input {
+    height: 25px; /* Altura padrão de inputs do Bootstrap */
+    box-sizing: border-box;
+}
+
+.caixa-titulo {
+    /* Cor de fundo verde */
+    background-color: #28a745; /* Um tom de verde Bootstrap (success) é comum */
+    
+    /* Cor do texto branca */
+    color: #fff;
+    
+    /* Ocupar 100% da largura do contêiner pai */
+    width: 100%;
+    
+    /* Garantir que não haja margem superior, grudando no elemento acima */
+    margin-top: 0;
+    
+    /* Adicionar preenchimento interno para que o texto não fique colado nas bordas */
+    padding: 10px 15px; /* 10px em cima/baixo, 15px nas laterais */
+    
+    /* Opcional: Remover qualquer margem inferior padrão de parágrafos/elementos internos */
+    margin-bottom: 0;
+    
+    /* Opcional: Se estiver dentro de um container com padding, use box-sizing */
+    box-sizing: border-box; 
+    
+    /* Opcional: Centralizar o texto */
+    text-align: center;
+    
+    /* Opcional: Negrito */
+    font-weight: bold; 
+}
+
+/* CSS Adicional para uniformizar os botões de ação */
+.btn-custom-action {
+    /* Define uma altura mínima para todos os botões, uniformizando o layout */
+    min-height: 70px; 
+    
+    /* Usa Flexbox para centralizar o texto verticalmente e horizontalmente */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    
+    /* Garante que o texto do título principal esteja centralizado */
+    text-align: center; 
+    
+    /* Adiciona um pouco de padding interno para o conteúdo respirar */
+    padding: 10px; 
+    
+    /* Garante que a descrição (<small>) tenha cor branca, mas mais esmaecida */
+    color: #fff; /* Garante que o texto principal seja branco */
+}
+
+/* Você pode adicionar um estilo específico para a descrição se quiser mais contraste */
+.btn-custom-action small {
+    color: rgba(255, 255, 255, 0.75) !important; /* Branco semi-transparente */
+    font-size: 0.8em;
+}
+
+/* Seu CSS para a classe caixa-titulo que fizemos antes */
+.caixa-titulo {
+    background-color: #28a745; 
+    color: #fff;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0; /* Garante que grude no elemento de cima e de baixo */
+    padding: 10px 15px;
+    box-sizing: border-box; 
+    text-align: center;
+    font-weight: bold; 
+}
+
+/* Centraliza o conteúdo dentro da caixa-titulo */
+.caixa-titulo h2 {
+    margin: 0;
+}
+
+.caixa-menu-link a:hover {
+    text-align: center;
+    text-decoration: none;
+  color: inherit; /* opcional: mantém a cor do texto padrão */
+  text-decoration: underline;
+  color: #007bff; /* cor opcional no hover */
+}
+

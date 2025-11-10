@@ -1,0 +1,49 @@
+{% extends "base_paciente.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Trocar Senha Provisória{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+<div class="row justify-content-center">
+<div class="col-md-7 col-lg-6">
+<div class="card shadow-lg border-0 rounded-4">
+<div class="card-body p-5">
+
+                <h2 class="card-title text-center text-danger mb-4 fw-bold">
+                    <i class="bi bi-shield-lock-fill me-2"></i> Segurança Obrigatória
+                </h2>
+                
+                <p class="text-center text-muted mb-4">
+                    Detectamos que você está usando uma senha provisória. Por favor, crie uma nova senha forte para prosseguir.
+                </p>
+
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Usa o filtro crispy para estilizar o formulário de senha do Django -->
+                    {{ form|crispy }}
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold">
+                            Trocar Senha e Acessar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <p class="text-muted small">
+                A senha deve ser forte e diferente da provisória.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

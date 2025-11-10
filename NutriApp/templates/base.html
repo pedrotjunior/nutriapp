@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}NutriApp{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- Barra de navegação principal -->
+    <nav class="navbar">
+        <a href="/">
+            <img src="{% static 'img/logo.png' %}" alt="NutriApp" class="logo">
+        </a>
+        <span class="brand">NUTRIAPP</span>
+    </nav>
+
+    <!-- Aqui entram os links e cabeçalho do nutricionista -->
+    {% block nav_extra_links %}
+    
+    {% endblock %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>NutriApp &copy; {{ now|date:"Y" }} - Desenvolvido para Nutricionistas e Pacientes</p>
+    </footer>
+
+</body>
+</html>

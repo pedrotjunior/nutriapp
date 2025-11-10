@@ -1,0 +1,48 @@
+{% extends "base_nutricionista.html" %}
+{% load static %}
+
+{% block title %}
+<h2>Avaliação do Estilo de Vida</h2>
+{% endblock %}
+
+{% block content %}
+<div class="form-container mt-4">
+    <h2 class="mb-4">Avaliação do Estilo de Vida</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-fields">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-success mt-3">💾 Salvar</button>
+    </form>
+</div>
+
+{% if salvo_com_sucesso %}
+<script>
+    // Mostra alerta e redireciona em 2s
+    alert("Salvo com sucesso!");
+    setTimeout(function() {
+        window.location.href = "{% url 'nutricionista:selecionar_paciente' %}";
+    }, 2000);
+</script>
+{% endif %}
+
+<script>
+const ativ = document.getElementById('id_ativ_fisica');
+if (ativ) {
+    const container = document.createElement('div');
+    container.id = 'atividade_fields';
+    container.style.display = 'none';
+    ativ.parentNode.appendChild(container);
+
+    ativ.addEventListener('change', function() {
+        if (this.checked) {
+            alert('Cadastre a nova atividade física!');
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

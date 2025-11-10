@@ -1,0 +1,212 @@
+{% extends "base_nutricionista.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-antropometria">
+    <h1 class="titulo-principal">Antropometria de {{ paciente.nome|default:"[Nome do Paciente]" }}</h1>
+
+    <form method="post" id="consultaForm">
+        {% csrf_token %}
+
+        <div class="caixa-titulo">
+            <h2>Medidas Antropométricas</h2>
+        </div>
+        <div class="card-section medidas-antropometricas-body form-grid-2-col-compact">
+    
+            <div class="form-group-item triple-layout">
+                <label>Punho:</label>
+                {{ form.circunferencia_punho }}
+                <span class="unit">cm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Cintura:</label>
+                {{ form.circunferencia_cintura }}
+                <span class="unit">cm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Braço:</label>
+                {{ form.circunferencia_braco }}
+                <span class="unit">cm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Abdome:</label>
+                {{ form.circunferencia_abdome }}
+                <span class="unit">cm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Coxa:</label>
+                {{ form.circunferencia_coxa }}
+                <span class="unit">cm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Quadril:</label>
+                {{ form.circunferencia_quadril }}
+                <span class="unit">cm</span>
+            </div>
+        </div>
+
+        <div class="card-section dobras-cutaneas-header">
+            <h2 class="section-title">Dobras Cutâneas</h2>
+        </div>        
+        <div class="card-section dobras-cutaneas-body form-grid-2-col-compact">
+            <div class="form-group-item triple-layout">
+                <label>Tricipital:</label>
+                {{ form.dobra_tricipital }}
+                <span class="unit">mm</span>
+            </div>
+            <div class="form-group-item triple-layout">
+                <label>Subescapular:</label>
+                {{ form.dobra_subescapular }}
+                <span class="unit">mm</span>
+            </div>    
+        </div>
+
+        <div>
+            <div>
+                <div class="card-section peso-altura-header">
+                    <h2 class="section-title">Peso e Altura</h2>
+                </div>
+                <div class="card-section peso-altura-body form-grid-2-col-compact">                    
+                    <div class="form-group-item triple-layout">
+                        <label>Peso:</label>
+                        {{ form.peso }}
+                        <span class="unit-peso">kg</span>
+                    </div>                    
+                    <div class="form-group-item triple-layout">
+                        <label>Altura:</label>
+                        {{ form.altura }}
+                        <span class="unit-altura">m</span>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+     
+       <div class="card-section Resultado-header">
+    <h2 class="section-title">Resultado</h2>
+</div>
+
+<div class="card-section resultado-body-grid">
+    
+    <div class="resultado-linha-flex">
+        
+        <p class="resultado-item resultado-peso-ideal">
+            Peso Ideal: <span id="peso-ideal-display">--</span> kg
+        </p>
+        
+        <p class="resultado-item resultado-imc">
+            IMC: <span id="imc-display">--</span>
+        </p>
+        
+    </div>
+    
+    <div class="resultado-linha-classificacao">
+        <p class="resultado-classificacao">
+            Classificação IMC: <span id="imc-classificacao-display">--</span>
+        </p>
+    </div>
+    
+</div>
+                  
+        <button type="submit" class="btn-submit btn-salvar-consulta">Salvar Consulta</button>
+    </form>
+    
+</div>
+<script>
+    // Função de Classificação de IMC baseada na sua lógica Python, agora retorna a cor
+    function getClassificacaoIMC(imc) {
+        let classificacao = '';
+        let corDeFundo = '';
+
+        if (imc < 16) {
+            classificacao = "Magreza grave";
+            corDeFundo = '#FFC107'; // Amarelo Laranja
+        } else if (imc < 17) {
+            classificacao = "Magreza moderada";
+            corDeFundo = '#FFD700'; // Amarelo Ouro
+        } else if (imc < 18.5) {
+            classificacao = "Magreza leve";
+            corDeFundo = '#FFEE93'; // Amarelo Claro
+        } else if (imc < 25) {
+            classificacao = "Peso normal";
+            corDeFundo = '#38761d'; // VERDE (Cor que você já usa)
+        } else if (imc < 30) {
+            classificacao = "Sobrepeso";
+            corDeFundo = '#FF7F50'; // Coral (Laranja/Vermelho Suave)
+        } else if (imc < 35) {
+            classificacao = "Obesidade grau I";
+            corDeFundo = '#FF4500'; // Laranja Vermelho
+        } else if (imc < 40) {
+            classificacao = "Obesidade grau II (severa)";
+            corDeFundo = '#DC143C'; // Vermelho Carmim (Mais Escuro)
+        } else {
+            classificacao = "Obesidade grau III (mórbida)";
+            corDeFundo = '#8B0000'; // Vermelho Escuro Forte
+        }
+        
+        return { classificacao, corDeFundo };
+    }
+
+    // Função principal para calcular e exibir todos os resultados
+    function calcularEExibirResultadosIMC() {
+        // ... (CÓDIGO DE OBTENÇÃO DE PESO/ALTURA E CÁLCULO DE IMC e PESO IDEAL IGUAIS) ...
+        
+        const pesoInput = document.getElementById('id_peso');
+        const alturaInput = document.getElementById('id_altura');
+        
+        if (!pesoInput || !alturaInput) return;
+
+        let peso = parseFloat(pesoInput.value.replace(',', '.'));
+        let altura = parseFloat(alturaInput.value.replace(',', '.'));
+
+        if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+            // Limpa os resultados e o estilo se os dados forem inválidos
+            document.getElementById('imc-display').textContent = '--';
+            document.getElementById('peso-ideal-display').textContent = '--';
+            
+            const classificacaoDisplay = document.getElementById('imc-classificacao-display');
+            classificacaoDisplay.textContent = '--';
+            classificacaoDisplay.style.backgroundColor = 'transparent'; // Remove cor de fundo
+            classificacaoDisplay.style.color = '#555'; // Volta à cor padrão
+            return;
+        }
+
+        const imc = peso / (altura * altura);
+        const imcArredondado = imc.toFixed(2).replace('.', ','); 
+
+        const pesoIdeal = 22 * (altura * altura);
+        const pesoIdealArredondado = pesoIdeal.toFixed(2).replace('.', ','); 
+
+        // NOVO: Chama a função que retorna a Classificação E a Cor
+        const { classificacao, corDeFundo } = getClassificacaoIMC(imc);
+
+        // 5. Exibir os resultados
+        document.getElementById('imc-display').textContent = imcArredondado;
+        document.getElementById('peso-ideal-display').textContent = pesoIdealArredondado;
+        
+        const classificacaoDisplay = document.getElementById('imc-classificacao-display');
+        classificacaoDisplay.textContent = classificacao;
+
+        // NOVO: Aplicar a cor de fundo e a cor do texto
+        classificacaoDisplay.style.backgroundColor = corDeFundo;
+        
+        // Define a cor do texto (Branco para cores escuras, Preto para cores claras)
+        if (imc < 18.5 || imc < 25) { // Magreza e Peso Normal (cores claras)
+            classificacaoDisplay.style.color = '#333'; 
+        } else { // Sobrepeso e Obesidade (cores escuras)
+            classificacaoDisplay.style.color = 'white'; 
+        }
+    }
+
+    // ... (CÓDIGO DOS EVENT LISTENERS IGUAIS) ...
+    document.addEventListener('DOMContentLoaded', () => {
+        const pesoInput = document.getElementById('id_peso');
+        const alturaInput = document.getElementById('id_altura');
+        
+        if (pesoInput) { pesoInput.addEventListener('input', calcularEExibirResultadosIMC); }
+        if (alturaInput) { alturaInput.addEventListener('input', calcularEExibirResultadosIMC); }
+        
+        calcularEExibirResultadosIMC();
+    });
+</script>
+
+{% endblock %}

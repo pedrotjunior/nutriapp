@@ -1,0 +1,153 @@
+{% extends "base_nutricionista.html" %}
+{% load static %}
+
+{% block title %}<h2>Cadastrar Paciente</h2>{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    
+    <div class="nutri-info">
+        <strong>Nutricionista Responsável:</strong> 
+        <span>{{ request.user.nome }}</span>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.non_field_errors }}
+        
+       <div class="form-fields-aligned">
+    
+    <div class="form-group-aligned">
+        <label for="{{ form.nome.id_for_label }}">Nome:</label>
+        {{ form.nome }}
+        {{ form.nome.errors }}
+    </div>
+
+    <div class="form-group-aligned">
+        <label for="{{ form.data_nascimento.id_for_label }}">Data de Nascimento:</label>
+        {{ form.data_nascimento }}
+        {{ form.data_nascimento.errors }}
+    </div>
+    
+    <div class="form-group-aligned">
+        <label for="{{ form.endereco.id_for_label }}">Endereço:</label>
+        <div class="campo-grupo-inline">
+            <div class="campo-endereco">{{ form.endereco }}</div>
+            <div class="campo-numero">{{ form.numero_endereco }}</div>
+        </div>
+        {{ form.endereco.errors }}
+        {{ form.numero_endereco.errors }}
+    </div>
+
+    <div class="form-group-aligned">
+        <label for="{{ form.complemento.id_for_label }}">Complemento:</label>
+        {{ form.complemento }}
+        {{ form.complemento.errors }}
+    </div>
+
+    <div class="form-group-aligned">
+        <label for="{{ form.cidade.id_for_label }}">Cidade:</label>
+        <div class="campo-grupo-inline">
+            <div class="campo-cidade">{{ form.cidade }}</div>
+            <div class="campo-uf">{{ form.uf }}</div>
+        </div>
+        {{ form.cidade.errors }}
+        {{ form.uf.errors }}
+    </div>
+    
+    <div class="form-group-aligned">
+        <label for="{{ form.cep.id_for_label }}">CEP:</label>
+        {{ form.cep }}
+        {{ form.cep.errors }}
+    </div>
+    
+    <div class="form-group-aligned">
+        <label for="{{ form.celular.id_for_label }}">Celular:</label>
+        {{ form.celular }}
+        {{ form.celular.errors }}
+    </div>
+
+    <div class="form-group-aligned">
+        <label for="{{ form.email.id_for_label }}">Email:</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+
+    <div class="form-group-aligned full-width-field">
+        <label for="{{ form.motivo_consulta.id_for_label }}">Motivo da Consulta:</label>
+        {{ form.motivo_consulta }}
+        {{ form.motivo_consulta.errors }}
+</div>
+    
+</div>
+        
+        {% if form.errors %}
+            <div style="color:red; margin-top: 15px;">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ field.label }}: {{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        
+        <button type="submit" class="btn-salvar">Salvar</button>
+    </form>
+</div>
+
+{% if cadastro_sucesso %}
+    <script>
+        // Este código cria um alerta personalizado (DIV) que se fecha sozinho, 
+        // cumprindo o requisito de tempo e, em seguida, redireciona.
+
+        window.onload = function() {
+            // 1. Cria o elemento do alerta
+            const alertDiv = document.createElement('div');
+            alertDiv.id = 'custom-success-alert';
+            alertDiv.textContent = 'Cadastro efetuado com sucesso!';
+        
+            // 2. Aplica estilos para ser um ALERTA FIXO e centralizado
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px 30px;
+                background-color: #4CAF50; /* Cor de sucesso */
+                color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                font-size: 18px;
+                opacity: 0; /* Começa invisível */
+                transition: opacity 0.5s;
+            `;
+        
+            // 3. Adiciona ao corpo do documento e o torna visível
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.style.opacity = 1;
+            }, 50); // Pequeno delay para garantir a transição
+        
+            // 4. Temporizador para fechar após 5 segundos E REDIRECIONAR
+            setTimeout(() => {
+                alertDiv.style.opacity = 0; // Inicia o fade out
+                
+                // Remove o elemento APÓS a transição E REDIRECIONA
+                setTimeout(() => {
+                    alertDiv.remove();
+                    
+                    // --- REDIRECIONAMENTO ADICIONADO AQUI ---
+                    // Redireciona para a URL do dashboard
+                    // É crucial que 'dashboard_nutricionista' esteja definida no urls.py
+                    window.location.href = "{% url 'nutri_dashboard' %}"; 
+                    // ----------------------------------------
+                    
+                }, 500); // 500ms é o tempo da transição
+            }, 5000); // 5000ms (5 segundos) é o tempo de permanência
+        };
+    </script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,294 @@
+body { 
+        height: 100%;
+        font-family: Arial, sans-serif; 
+        margin: 0; 
+        padding: 0; 
+        min-height: 100vh; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        background: #f4f4f4; 
+    }
+    
+.box-central{ 
+    background: white; 
+    padding: 30px; 
+    border: 3px solid #3c8647; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* sombra leve */ 
+    text-align: center; 
+    width: 400px; 
+} 
+
+nav { 
+    background: #3c8647; 
+    padding: 1em; 
+    display: flex; 
+    align-items: center; 
+} 
+
+nav .logo { 
+    height: 80px; 
+    margin-right: 20px; 
+} 
+
+nav .brand{ 
+    flex: 1; 
+    text-align: center; 
+    color: white; 
+    font-size: 28px; 
+    font-weight: bold; 
+    letter-spacing: 2px; 
+} 
+
+nav a { 
+    color: white; 
+    margin-right: 15px; 
+    text-decoration: none; 
+    font-weight: bold; 
+} 
+
+nav a:hover { 
+    text-decoration: underline 
+} 
+
+main { 
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
+} 
+
+footer { 
+    background: #3c8647; 
+    color: white; 
+    text-align: center; 
+    padding: 1em; 
+    margin-top: auto; 
+} 
+
+.login-container { 
+    max-width: 400px; 
+    margin: 50px auto; 
+    background: #f8f9fa; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+} 
+
+.login-container h2 { 
+    text-align: center; 
+    margin-bottom: 10px; 
+    color: #2c3e50; 
+} 
+
+.login-container p { 
+    text-align: center; 
+    margin-bottom: 20px; 
+    color: #555; 
+} 
+
+.login-container form { 
+    display: flex; 
+    flex-direction: column; 
+} 
+
+.login-container button { 
+    background: #3c8647; 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    margin-top: 10px; 
+    width: 100%; 
+} 
+
+.login-container button:hover { 
+    background: #2e6a39; 
+} 
+
+.login-links{ 
+    margin-top: 15px; 
+    display: flex; 
+    justify-content: center; 
+    gap: 10px; font-size: 14px; 
+} 
+
+.login-links a { 
+    color: #3c8647; 
+    text-decoration: none; 
+    font-weight: bold; 
+} 
+
+.login-links a:hover { 
+    text-decoration: underline; 
+} 
+
+.form-container { 
+    width: 400px; 
+    margin: 50px auto; 
+    padding: 20px; 
+    border: 2px solid #3c8647; 
+    border-radius: 15px; 
+    background: #f9f9f9; 
+    text-align: center; 
+} 
+
+.form-container h2 { 
+    color: #3c8647; 
+} 
+
+button { 
+    background: #3c8647; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
+
+button:hover { 
+    background: #2f6b38; 
+} 
+
+.form-fields p{ 
+    margin: 12px 0; 
+    text-align: left; 
+} 
+
+.form-fields label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; color:#333 
+} 
+
+.form-fields input{ 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+} 
+
+.link-voltar a { 
+    text-decoration: none;
+     color: #3c8647; 
+} 
+
+.link-voltar a:hover { 
+    color: #2e6a39; 
+} 
+
+.form-fields input, .form-fields select, .form-fields textarea { 
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+}
+
+/* === HEADER DO NUTRICIONISTA === */ 
+.nutri-header { 
+    display: flex; 
+    justify-content: flex-end; 
+    background: #4CAF50; 
+    color: white; 
+    padding: 10px 20px; 
+    border-radius: 8px 8px 0 0; 
+} 
+
+.nutri-nome { 
+    font-size: 16px; 
+    font-weight: 500; 
+} 
+
+/* === LINKS PRINCIPAIS === */ 
+.nutri-links { 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+    background: #388E3C; 
+    padding: 10px 0; 
+} 
+
+.nutri-links a { 
+    color: white; 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: 0.3s; 
+} 
+
+.nutri-links a:hover { 
+    text-decoration: underline; 
+} 
+
+/* === LAYOUT GERAL === */ 
+.nutri-layout { 
+    display: flex; 
+    min-height: calc(100vh - 180px); 
+} 
+
+/* === SIDEBAR === */ 
+.nutri-sidebar { 
+    position: fixed; 
+    top: 160px; /* Altura da barra superior + links */ 
+    left: 0; 
+    width: 220px; 
+    height: calc(100vh - 160px); 
+    background: #f0f0f0; 
+    border-right: 2px solid #ccc; 
+    padding: 20px 10px; 
+    overflow-y: auto; 
+} 
+
+.nutri-sidebar ul { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+} 
+
+.nutri-sidebar li { 
+    margin: 15px 0; 
+} 
+
+.nutri-sidebar a { 
+    color: #333; 
+    text-decoration: none; 
+    font-weight: 500; 
+} 
+
+.nutri-sidebar a:hover { 
+    color: #4CAF50; 
+} 
+
+/* === CONTEÚDO PRINCIPAL === */ 
+.nutri-main { 
+    margin-left: 240px; /* espaço da sidebar */ 
+    padding: 30px; flex-grow: 1; 
+} 
+
+/* === RESPONSIVO === */ 
+@media (max-width: 768px) { 
+    .nutri-sidebar { 
+        position: static; 
+        width: 100%; 
+        height: auto; 
+        border-right: none; 
+        border-bottom: 2px solid #ccc; 
+    } 
+    .nutri-main { 
+        margin-left: 0; 
+    } 
+    .nutri-links { 
+        flex-direction: column; 
+        align-items: center; 
+    } 
+    .nutri-header { 
+        justify-content: center; 
+        text-align: center; 
+    } 
+}
