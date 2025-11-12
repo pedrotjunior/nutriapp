@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-# Define o namespace da aplicação. Isso é crucial para que você use
-# {% url 'nutricionista:nutri_dashboard' %} em seus templates.
 app_name = 'nutricionista' 
 
 urlpatterns = [
@@ -10,7 +8,9 @@ urlpatterns = [
     path('dashboard/', views.dashboard_nutri, name='nutri_dashboard'),
     path('paciente/cadastrar/', views.cadastrar_paciente, name='cadastrar_paciente'),
     path('selecionar_paciente/', views.selecionar_paciente, name='selecionar_paciente'),
-    path('selecionar_paciente_ajax/', views.selecionar_paciente_ajax, name='selecionar_paciente_ajax'),
+    path('salvar_paciente_sessao/', views.salvar_paciente_sessao, name='salvar_paciente_sessao'),
+    path('obter_paciente_sessao/', views.obter_paciente_sessao, name='obter_paciente_sessao'),
+    path('encerrar_consulta/', views.encerrar_consulta, name='encerrar_consulta'),
 
     # ------------------ ROTAS DE AVALIAÇÃO DO PACIENTE (Dependem do paciente_id) ------------------
 

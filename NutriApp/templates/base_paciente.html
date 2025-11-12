@@ -2,7 +2,20 @@
 {% load static %}
 
 {% block nav_extra_links %}
+<div class="nutri-header">
+   {% if user.is_authenticated %}
+        Bem-vindo(a), <strong>{{ user.nome }}</strong>
+    {% endif %}
+</div>
+<div class="nutri-links">
+        {% if user.is_authenticated %}
+            <a href="#" class="nav-btn logout-link" onclick="document.getElementById('logout-form').submit(); return false;">Sair</a>
 
-
+            <form id="logout-form" method="post" action="{% url 'logout' %}" style="display:none;">
+                {% csrf_token %}
+            </form>
+        {% endif %}
+            
+    </div>
 
 {% endblock %}

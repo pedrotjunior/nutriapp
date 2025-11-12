@@ -792,6 +792,10 @@ input[type="radio"] {
     border-bottom: none;
 }
 
+.lista-pacientes a {
+    text-decoration: none; /* remove o traço embaixo */
+}
+
 * Nome do paciente no topo */
 .paciente-nome {
     text-align: center;
@@ -799,6 +803,38 @@ input[type="radio"] {
     font-weight: bold;
     margin-bottom: 25px; /* espaço abaixo do nome */
     color: #2E7D32;
+}
+
+#input-paciente {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+
+.lista-suspensa {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none; /* começa oculta */
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.paciente-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.paciente-item:hover {
+    background-color: #e6ffe6;
 }
 
 /* Formulário geral */
@@ -1352,7 +1388,6 @@ form#consultaForm {
 /* Seu CSS para a classe caixa-titulo que fizemos antes */
 .caixa-titulo {
     background-color: #28a745; 
-    color: #fff;
     width: 100%;
     margin-top: 0;
     margin-bottom: 0; /* Garante que grude no elemento de cima e de baixo */
@@ -1365,13 +1400,101 @@ form#consultaForm {
 /* Centraliza o conteúdo dentro da caixa-titulo */
 .caixa-titulo h2 {
     margin: 0;
+    color: #fff;
 }
 
-.caixa-menu-link a:hover {
-    text-align: center;
-    text-decoration: none;
-  color: inherit; /* opcional: mantém a cor do texto padrão */
-  text-decoration: underline;
-  color: #007bff; /* cor opcional no hover */
+.caixa-selecao { 
+    background: white; 
+    padding: 30px; 
+    border: 3px solid #3c8647; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    text-align: center; 
+    width: 400px; ;
 }
 
+.caixa-menu-link {
+    display: flex;
+    flex-direction: column; /* organiza as linhas de botões */
+    gap: 15px;              /* espaçamento vertical entre as linhas */
+    align-items: center;    /* centraliza tudo */
+    margin-top: 20px;
+}
+
+.caixa-menu-link div {
+    display: flex;
+    gap: 10px;              /* espaçamento horizontal entre os botões */
+    justify-content: center;
+}
+
+.caixa-menu-link a {
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;  /* remove o traço embaixo */
+    padding: 10px 20px;     /* tamanho dos botões */
+    font-weight: 500;
+    border-radius: 8px;     /* bordas arredondadas */
+}
+
+.campo-pesquisa {
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+}
+
+/* container para o input e a seta */
+.dropdown-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#input-paciente {
+    width: 100%;
+    padding: 10px 35px 10px 10px; /* espaço extra à direita para a seta */
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* seta ▼ */
+.dropdown-arrow {
+    position: absolute;
+    right: 10px;
+    color: #28a745;
+    font-size: 16px;
+    pointer-events: none; /* evita bloquear o clique no input */
+    transition: transform 0.2s ease;
+}
+
+/* anima seta ao abrir */
+.dropdown-container.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* lista suspensa */
+.lista-suspensa {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.paciente-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.paciente-item:hover {
+    background-color: #e6ffe6;
+}

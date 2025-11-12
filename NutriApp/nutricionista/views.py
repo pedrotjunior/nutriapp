@@ -50,122 +50,86 @@ def dashboard_nutri(request):
 # ----------------------------------------------------------------------
 @login_required(login_url='login')
 def cadastrar_paciente(request):
-    """Cadastra um novo paciente e seu usuário, enviando credenciais por e-mail."""
+    """Cadastra um novo paciente e cria o perfil automaticamente, sem envio de e-mail."""
 
     if request.method == 'POST':
         form = PacienteForm(request.POST)
 
         if form.is_valid():
-            # --- 1. PREPARAÇÃO DE DADOS ---
             data_nascimento = form.cleaned_data['data_nascimento']
             email_paciente = form.cleaned_data['email']
             nome_paciente = form.cleaned_data['nome']
 
-            # Cálculo da Idade (Mantido)
             hoje = date.today()
-            idade_calculada = hoje.year - data_nascimento.year - \
-                              ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
+            idade_calculada = (
+                hoje.year - data_nascimento.year
+                - ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
+            )
 
-            # Geração da Senha Provisória (Mantido)
-            senha_provisoria = secrets.token_urlsafe(10)
+            primeiro_nome = nome_paciente.split()[0].lower()
+            senha_padrao = f"{primeiro_nome}.Nutri@123"
 
-            # Usar transaction.atomic para garantir atomicidade
             try:
-                with transaction.atomic(): # Início da Transação Atômica
-
+                with transaction.atomic():
                     paciente_instance = form.save(commit=False)
                     paciente_instance.nutricionista = request.user
                     paciente_instance.idade = idade_calculada
 
-                    # --- 2. SALVAR Usuário (contas_usuario) ---
-                    # CRUCIAL: Captura o objeto do usuário recém-criado
                     novo_usuario = Usuario.objects.create(
                         email=email_paciente,
                         nome=nome_paciente,
-                        password=make_password(senha_provisoria),
+                        password=make_password(senha_padrao),
                         tipo='PACIENTE',
                         is_active=True,
                     )
 
-                    # --- 3. VINCULAR E SALVAR Paciente (nutricionista_paciente) ---
-                    # CORREÇÃO: Atribui o objeto Usuario recém-criado ao campo 'user' do Paciente
                     paciente_instance.user = novo_usuario
-                    paciente_instance.save() # Salva a instância do Paciente com a FK 'user' preenchida
-                
-                # O bloco 'with transaction.atomic():' terminou, e as alterações foram commitadas
-                # Se uma exceção tivesse ocorrido, tudo teria sido revertido.
+                    paciente_instance.save()
 
-                # --- 4. ENVIO DE EMAIL (Fora da Transação) ---
-                # A lógica de email é um efeito colateral, é melhor mantê-la fora da transação.
-                try:
-                    assunto = 'Bem-vindo(a) ao NutriApp - Seus dados de acesso'
-                    mensagem = f"""
-Olá {nome_paciente},
+                # ✅ Passa as informações para o template
+                context = {
+                    'form': PacienteForm(),  # novo formulário vazio
+                    'novo_paciente': {
+                        'nome': nome_paciente,
+                        'email': email_paciente,
+                        'senha': senha_padrao
+                    }
+                }
 
-Seu cadastro foi realizado com sucesso pelo seu nutricionista.
-Abaixo estão seus dados de acesso ao sistema:
-
-Email (Login): {email_paciente}
-Senha Provisória: {senha_provisoria}
-
-Acesse o sistema e troque sua senha.
-[Insira aqui a URL da sua página de login]
-
-Atenciosamente,
-Sua Equipe NutriApp
-"""
-                    send_mail(
-                        assunto,
-                        mensagem,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [email_paciente],
-                        fail_silently=False,
-                    )
-                except Exception as e:
-                    print(f"Erro ao enviar email: {e}") 
-                    # Considerar se um erro de e-mail deve reverter o cadastro.
-                    # No código atual, não reverte, o que é comum.
-
-                # --- 5. FEEDBACK e NOVO FORMULÁRIO ---
-                messages.success(request, f"Paciente {nome_paciente} cadastrado com sucesso! Credenciais enviadas por e-mail.")
-                return redirect('nutricionista:cadastrar_paciente')
+                messages.success(request, f"Paciente {nome_paciente} cadastrado com sucesso!")
+                return render(request, 'nutricionista/cadastrar_paciente.html', context)
 
             except Exception as e:
-                # Esta exceção captura falhas na criação do Usuário ou Paciente.
-                # A transação.atomic garante o rollback automático.
-                messages.error(request, "Erro ao criar usuário ou paciente. O e-mail pode já estar em uso ou houve um erro no banco de dados.")
-                print(f"Erro ao criar usuário/paciente: {e}")
-                return render(request, 'nutricionista/cadastrar_paciente.html', {'form': form}) 
-            
-        else:
-            # Formulário inválido, re-renderiza com erros
-            return render(request, 'nutricionista/cadastrar_paciente.html', {'form': form})
-            
-    else:
-        # Método GET
-        form = PacienteForm()
-    
+                messages.error(request, "Erro ao criar paciente.")
+                print(f"Erro ao criar paciente: {e}")
+
+        # Form inválido
+        return render(request, 'nutricionista/cadastrar_paciente.html', {'form': form})
+
+    # GET
+    form = PacienteForm()
     return render(request, 'nutricionista/cadastrar_paciente.html', {'form': form})
 
 # ----------------------------------------------------------------------
 # FUNÇÃO SELECIONAR PACIENTE
 # ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # EXIBE A PÁGINA DE SELEÇÃO
+    # ----------------------------------------------------------------------
 @login_required
 def selecionar_paciente(request):
     user = request.user
-    pacientes = Paciente.objects.filter(nutricionista=user)
-    paciente_selecionado = request.session.get('paciente_nome', None)
+    pacientes = Paciente.objects.filter(nutricionista=user).order_by('nome')
+    paciente_selecionado = request.session.get('paciente_nome')  # 🔹 mantém o nome
     return render(request, 'nutricionista/selecionar_paciente.html', {
         'pacientes': pacientes,
-        'paciente_selecionado': paciente_selecionado
+        'paciente_selecionado': paciente_selecionado,
     })
-
-# ----------------------------------------------------------------------
-# FUNÇÃO SELECIONAR PACIENTE AJAX
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # SALVAR PACIENTE NA SESSÃO
+    # ----------------------------------------------------------------------
 @login_required
-def selecionar_paciente_ajax(request):
-    """Recebe o ID do paciente e guarda em sessão (chamado via JavaScript)."""
+def salvar_paciente_sessao(request):
     if request.method == 'POST':
         paciente_id = request.POST.get('paciente_id')
         paciente = get_object_or_404(Paciente, id=paciente_id)
@@ -173,163 +137,46 @@ def selecionar_paciente_ajax(request):
         request.session['paciente_id'] = paciente.id
         request.session['paciente_nome'] = paciente.nome
 
-        return JsonResponse({
-            'status': 'ok',
-            'paciente_nome': paciente.nome
-        })
+        return JsonResponse({'status': 'ok', 'paciente_nome': paciente.nome})
     return JsonResponse({'status': 'error', 'message': 'Método não permitido.'}, status=405)
 
-# ----------------------------------------------------------------------
-# FUNLÇAO AVALIAÇÃO ESTILO DE VIDA
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # OBTÉM O PACIENTE ATUAL SALVO NA SESSÃO
+    # ----------------------------------------------------------------------
 @login_required
-def avaliacao_estilo_vida(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id, nutricionista=request.user)
-    avaliacao_existente = AvaliacaoEstiloVida.objects.filter(paciente=paciente).first()
-    form = AvaliacaoEstiloVidaForm(request.POST or None, instance=avaliacao_existente)
+def obter_paciente_sessao(request):
+    """
+    Retorna os dados do paciente atualmente salvo na sessão.
+    Usado pelo JavaScript para verificar se há um paciente selecionado.
+    """
+    paciente_id = request.session.get('paciente_id')
+    paciente_nome = request.session.get('paciente_nome')
 
-    salvo = False  # Flag para indicar se salvou
-
+    if paciente_id and paciente_nome:
+        # ✅ Se houver paciente na sessão, retorna os dados
+        return JsonResponse({
+            'paciente_id': paciente_id,
+            'paciente_nome': paciente_nome,
+            'status': 'ok'
+        })
+    
+    # ❌ Se não houver paciente salvo
+    return JsonResponse({
+        'paciente_id': None,
+        'paciente_nome': None,
+        'status': 'vazio'
+    })
+    # ----------------------------------------------------------------------
+    # ENCERRAR CONSULTA (LIMPA A SESSÃO)
+    # ----------------------------------------------------------------------
+@login_required
+def encerrar_consulta(request):
     if request.method == 'POST':
-        if form.is_valid():
-            avaliacao = form.save(commit=False)
-            avaliacao.paciente = paciente
-            avaliacao.save()
-            salvo = True  # Ativa o alerta no template
-
-    return render(request, 'nutricionista/avaliacao_estilo_vida.html', {
-        'form': form,
-        'paciente': paciente,
-        'salvo': salvo,
-    })
-
-# ----------------------------------------------------------------------
-# FUNÇÃO - ASPECTOS CLÍNICOS
-# ----------------------------------------------------------------------
-@login_required
-def aspectos_clinicos(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id, nutricionista=request.user)
-    aspectos_existente = AspectosClinicos.objects.filter(paciente=paciente).first()
-    form = AspectosClinicosForm(request.POST or None, instance=aspectos_existente)
-
-    if request.method == 'POST' and form.is_valid():
-        aspecto = form.save(commit=False)
-        aspecto.paciente = paciente
-        aspecto.save()
-
-        return HttpResponse("""
-            <script>
-                alert("Aspectos clínicos salvos no banco de dados!");
-                setTimeout(() => { window.location.href = '/nutricionista/selecionar_paciente/'; }, 2000);
-            </script>
-        """)
-
-    return render(request, 'nutricionista/aspectos_clinicos.html', {
-        'form': form,
-        'paciente': paciente,
-    })
-# ----------------------------------------------------------------------
-# FUNÇÃO - MEDICAMENTO
-# ----------------------------------------------------------------------
-@login_required
-@login_required
-def medicamento(request, paciente_id):
-    paciente = get_object_or_404(Paciente, id=paciente_id)
-    form = MedicamentoForm(request.POST or None)
-
-    if request.method == 'POST' and form.is_valid():
-        med = form.save(commit=False)
-        med.paciente = paciente
-        med.save()
-
-        return HttpResponse("""
-            <script>
-                alert("Medicamentos/Suplementos salvos no banco de dados!");
-                setTimeout(() => { window.location.href = '/nutricionista/selecionar_paciente/'; }, 2000);
-            </script>
-        """)
-
-    return render(request, 'nutricionista/medicamento.html', {'form': form, 'paciente': paciente})
-# ----------------------------------------------------------------------
-# FUNÇÃO - FREQUENCIA CONSUMO VIEW
-# ----------------------------------------------------------------------
-@login_required
-def frequencia_consumo_view(request, paciente_id): 
-    """Visualiza a frequência de consumo alimentar já cadastrada (Rota original do 'urls.py' antigo)."""
-    paciente = get_object_or_404(Paciente, id=paciente_id)
-    # ATENÇÃO: Implemente aqui a lógica para buscar e exibir a Frequência de Consumo
-    
-    # Exemplo: Buscando o último registro
-    # frequencia = FrequenciaConsumo.objects.filter(paciente=paciente).last()
-    
-    context = {
-        'paciente': paciente,
-        # 'frequencia': frequencia 
-    }
-    
-    # Rota original de renderização
-    return render(request, 'nutricionista/frequencia_consumo.html', context)
-
-# View rebatizada de registro_do_dia para registro_alimentar (GET/POST)
-
-# ----------------------------------------------------------------------
-# FUNÇÃO - FREQUENCIA ALIMENTAR
-# ----------------------------------------------------------------------
-def frequencia_alimentar(request, paciente_id):
-    """
-    Cadastra a frequência de consumo alimentar (mantendo a lógica original).
-    Ao salvar, mostra um alert e redireciona em 2 segundos para a página de seleção de paciente.
-    """
-    paciente = get_object_or_404(Paciente, id=paciente_id)
-    form = FrequenciaConsumoForm(request.POST or None)
-
-    if request.method == 'POST' and form.is_valid():
-        frequencia = form.save(commit=False)
-        frequencia.paciente = paciente 
-        frequencia.save()
-
-        # ✅ Mostra alerta e redireciona após 2 segundos
-        return HttpResponse("""
-            <script>
-                alert("Frequência alimentar salva no banco de dados com sucesso!");
-                setTimeout(() => {
-                    window.location.href = '/nutricionista/selecionar_paciente/';
-                }, 2000);
-            </script>
-        """)
-
-    # --- Lógica dos campos agrupados (field_trios) ---
-    field_trios = [
-        ('Leite', form['leite'], form['leite_quantidade']),
-        ('Queijo', form['queijo'], form['queijo_quantidade']),
-        ('Frituras', form['frituras'], form['frituras_quantidade']),
-        ('Arroz', form['arroz'], form['arroz_quantidade']),
-        ('Massas', form['massas'], form['massas_quantidade']),
-        ('Feijão/Grãos', form['feijao_graos'], form['feijao_graos_quantidade']), 
-        ('Carne Boi', form['carne_boi'], form['carne_boi_quantidade']), 
-        ('Carne Frango', form['carne_frango'], form['carne_frango_quantidade']), 
-        ('Peixe', form['peixe'], form['peixe_quantidade']),
-        ('Embutidos', form['embutidos'], form['embutidos_quantidade']), 
-        ('Enlatados', form['enlatados'], form['enlatados_quantidade']),
-        ('Legumes', form['legumes'], form['legumes_quantidade']),
-        ('Verduras', form['verduras'], form['verduras_quantidade']), 
-        ('Refrigerante', form['refrigerante'], form['refrigerante_quantidade']),
-        ('Frutas', form['frutas'], form['frutas_quantidade']), 
-        ('Ovos', form['ovos'], form['ovos_quantidade']),
-        ('Doces', form['doces'], form['doces_quantidade']),
-        ('Adoçante', form['adocante'], form['adocante_quantidade']),
-        ('Café', form['cafe'], form['cafe_quantidade']),
-        ('Chá', form['cha'], form['cha_quantidade']),
-        ('Bolachas', form['bolachas'], form['bolachas_quantidade']),
-    ]
-
-    context = {
-        'form': form, 
-        'paciente': paciente,
-        'field_trios': field_trios,
-        'titulo': 'Frequência Alimentar'
-    }
-    return render(request, 'nutricionista/frequencia_alimentar.html', context)
+        for key in ['paciente_id', 'paciente_nome']:
+            if key in request.session:
+                del request.session[key]
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error', 'message': 'Método não permitido.'}, status=405)
 
 # ----------------------------------------------------------------------
 # FUNÇÃO - avaliação antropometrica
@@ -601,3 +448,215 @@ def resultados_medidas_view(request, paciente_id):
         'data_ultima': ultima.data_consulta if possui_duas_consultas else None,
         'possui_duas_consultas': possui_duas_consultas,
     })
+
+# ----------------------------------------------------------------------
+# FUNÇÃO - ASPECTOS CLÍNICOS
+# ----------------------------------------------------------------------
+@login_required
+def aspectos_clinicos(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id, nutricionista=request.user)
+    aspectos_existente = AspectosClinicos.objects.filter(paciente=paciente).first()
+    form = AspectosClinicosForm(request.POST or None, instance=aspectos_existente)
+
+    if request.method == 'POST' and form.is_valid():
+        aspecto = form.save(commit=False)
+        aspecto.paciente = paciente
+        aspecto.save()
+
+        return HttpResponse("""
+            <script>
+                alert("Aspectos clínicos salvos no banco de dados!");
+                setTimeout(() => { window.location.href = '/nutricionista/selecionar_paciente/'; }, 2000);
+            </script>
+        """)
+
+    return render(request, 'nutricionista/aspectos_clinicos.html', {
+        'form': form,
+        'paciente': paciente,
+    })
+
+# ----------------------------------------------------------------------
+# FUNÇAO AVALIAÇÃO ESTILO DE VIDA
+# ----------------------------------------------------------------------
+@login_required
+def avaliacao_estilo_vida(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id, nutricionista=request.user)
+    avaliacao_existente = AvaliacaoEstiloVida.objects.filter(paciente=paciente).first()
+    form = AvaliacaoEstiloVidaForm(request.POST or None, instance=avaliacao_existente)
+
+    salvo = False  # Flag para indicar se salvou
+
+    if request.method == 'POST':
+        if form.is_valid():
+            avaliacao = form.save(commit=False)
+            avaliacao.paciente = paciente
+            avaliacao.save()
+            salvo = True  # Ativa o alerta no template
+
+    return render(request, 'nutricionista/avaliacao_estilo_vida.html', {
+        'form': form,
+        'paciente': paciente,
+        'salvo': salvo,
+    })
+
+# ----------------------------------------------------------------------
+# FUNÇÃO - FREQUENCIA CONSUMO VIEW
+# ----------------------------------------------------------------------
+@login_required
+def frequencia_consumo_view(request, paciente_id): 
+    """Visualiza a frequência de consumo alimentar já cadastrada (Rota original do 'urls.py' antigo)."""
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    # ATENÇÃO: Implemente aqui a lógica para buscar e exibir a Frequência de Consumo
+    
+    # Exemplo: Buscando o último registro
+    # frequencia = FrequenciaConsumo.objects.filter(paciente=paciente).last()
+    
+    context = {
+        'paciente': paciente,
+        # 'frequencia': frequencia 
+    }
+    
+    # Rota original de renderização
+    return render(request, 'nutricionista/frequencia_consumo.html', context)
+
+# View rebatizada de registro_do_dia para registro_alimentar (GET/POST)
+
+# ----------------------------------------------------------------------
+# FUNÇÃO - FREQUENCIA ALIMENTAR
+# ----------------------------------------------------------------------
+@login_required
+def frequencia_alimentar(request, paciente_id):
+    """
+    Exibe e permite editar a frequência alimentar de um paciente.
+    Os dados são armazenados na tabela RegistroDiario (campo JSON 'itens_consumidos').
+    """
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    data_hoje = timezone.now().date()
+
+    # 🔹 Tenta buscar um registro do dia atual
+    registro, created = RegistroDiario.objects.get_or_create(
+        paciente=paciente,
+        data_registro=data_hoje,
+        defaults={'itens_consumidos': []}
+    )
+
+    if request.method == 'POST':
+        # 🔹 Monta a lista de itens consumidos a partir do form
+        itens_consumidos = []
+        for campo_nome, campo_freq, campo_qtd in [
+            ('Leite', 'leite', 'leite_quantidade'),
+            ('Queijo', 'queijo', 'queijo_quantidade'),
+            ('Frituras', 'frituras', 'frituras_quantidade'),
+            ('Arroz', 'arroz', 'arroz_quantidade'),
+            ('Massas', 'massas', 'massas_quantidade'),
+            ('Feijão/Grãos', 'feijao_graos', 'feijao_graos_quantidade'),
+            ('Carne Boi', 'carne_boi', 'carne_boi_quantidade'),
+            ('Carne Frango', 'carne_frango', 'carne_frango_quantidade'),
+            ('Peixe', 'peixe', 'peixe_quantidade'),
+            ('Embutidos', 'embutidos', 'embutidos_quantidade'),
+            ('Enlatados', 'enlatados', 'enlatados_quantidade'),
+            ('Legumes', 'legumes', 'legumes_quantidade'),
+            ('Verduras', 'verduras', 'verduras_quantidade'),
+            ('Refrigerante', 'refrigerante', 'refrigerante_quantidade'),
+            ('Frutas', 'frutas', 'frutas_quantidade'),
+            ('Ovos', 'ovos', 'ovos_quantidade'),
+            ('Doces', 'doces', 'doces_quantidade'),
+            ('Adoçante', 'adocante', 'adocante_quantidade'),
+            ('Café', 'cafe', 'cafe_quantidade'),
+            ('Chá', 'cha', 'cha_quantidade'),
+            ('Bolachas', 'bolachas', 'bolachas_quantidade'),
+        ]:
+            frequencia = request.POST.get(campo_freq)
+            quantidade = request.POST.get(campo_qtd)
+            if frequencia or quantidade:  # só adiciona se houver algo preenchido
+                itens_consumidos.append({
+                    'item': campo_nome,
+                    'frequencia': frequencia,
+                    'quantidade': quantidade
+                })
+
+        # 🔹 Atualiza o campo JSON no banco
+        registro.itens_consumidos = itens_consumidos
+        registro.save()
+
+        # ✅ Mensagem e redirecionamento
+        return HttpResponse("""
+            <script>
+                alert("Frequência alimentar salva com sucesso!");
+                setTimeout(() => {
+                    window.location.href = '/nutricionista/selecionar_paciente/';
+                }, 1500);
+            </script>
+        """)
+
+    # --- Se GET, tenta preencher o form com dados existentes ---
+    dados_iniciais = {}
+    for item in registro.itens_consumidos:
+        nome = item['item']
+        freq = item.get('frequencia', '')
+        qtd = item.get('quantidade', '')
+        # Mapeia o nome do campo do form
+        chave_freq = nome.lower().replace(' ', '_').replace('/', '_')
+        chave_qtd = f"{chave_freq}_quantidade"
+        dados_iniciais[chave_freq] = freq
+        dados_iniciais[chave_qtd] = qtd
+
+    form = FrequenciaConsumoForm(initial=dados_iniciais)
+
+    # --- Lógica dos campos agrupados (mesma do seu template) ---
+    field_trios = [
+        ('Leite', form['leite'], form['leite_quantidade']),
+        ('Queijo', form['queijo'], form['queijo_quantidade']),
+        ('Frituras', form['frituras'], form['frituras_quantidade']),
+        ('Arroz', form['arroz'], form['arroz_quantidade']),
+        ('Massas', form['massas'], form['massas_quantidade']),
+        ('Feijão/Grãos', form['feijao_graos'], form['feijao_graos_quantidade']),
+        ('Carne Boi', form['carne_boi'], form['carne_boi_quantidade']),
+        ('Carne Frango', form['carne_frango'], form['carne_frango_quantidade']),
+        ('Peixe', form['peixe'], form['peixe_quantidade']),
+        ('Embutidos', form['embutidos'], form['embutidos_quantidade']),
+        ('Enlatados', form['enlatados'], form['enlatados_quantidade']),
+        ('Legumes', form['legumes'], form['legumes_quantidade']),
+        ('Verduras', form['verduras'], form['verduras_quantidade']),
+        ('Refrigerante', form['refrigerante'], form['refrigerante_quantidade']),
+        ('Frutas', form['frutas'], form['frutas_quantidade']),
+        ('Ovos', form['ovos'], form['ovos_quantidade']),
+        ('Doces', form['doces'], form['doces_quantidade']),
+        ('Adoçante', form['adocante'], form['adocante_quantidade']),
+        ('Café', form['cafe'], form['cafe_quantidade']),
+        ('Chá', form['cha'], form['cha_quantidade']),
+        ('Bolachas', form['bolachas'], form['bolachas_quantidade']),
+    ]
+
+    context = {
+        'form': form,
+        'paciente': paciente,
+        'field_trios': field_trios,
+        'titulo': 'Frequência Alimentar',
+    }
+    return render(request, 'nutricionista/frequencia_alimentar.html', context)
+
+# ----------------------------------------------------------------------
+# FUNÇÃO - MEDICAMENTO
+# ----------------------------------------------------------------------
+@login_required
+def medicamento(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    form = MedicamentoForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        med = form.save(commit=False)
+        med.paciente = paciente
+        med.save()
+
+        return HttpResponse("""
+            <script>
+                alert("Medicamentos/Suplementos salvos no banco de dados!");
+                setTimeout(() => { window.location.href = '/nutricionista/selecionar_paciente/'; }, 2000);
+            </script>
+        """)
+
+    return render(request, 'nutricionista/medicamento.html', {'form': form, 'paciente': paciente})
+
+
+

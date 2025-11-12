@@ -14,7 +14,7 @@ class UsuarioLoginView(LoginView):
         if user.tipo == 'NUTRI':
              return reverse_lazy('nutricionista:nutri_dashboard')  # ✅ corrigido
         elif user.tipo == 'PACIENTE':
-            return reverse_lazy('paciente_dashboard')
+            return reverse_lazy('paciente:paciente_dashboard')
         elif user.tipo == 'ADMIN':
             return reverse_lazy('admin:index')
 class UsuarioLogoutView(LogoutView):

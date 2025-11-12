@@ -98,55 +98,56 @@
 </div>
 
 {% if cadastro_sucesso %}
+    <!-- ✅ VERSÃO 1: Alert simples -->
     <script>
-        // Este código cria um alerta personalizado (DIV) que se fecha sozinho, 
-        // cumprindo o requisito de tempo e, em seguida, redireciona.
+        alert(
+            "✅ Paciente cadastrado com sucesso!\n\n" +
+            "Nome: {{ novo_paciente.nome }}\n" +
+            "E-mail: {{ novo_paciente.email }}\n" +
+            "Senha gerada: {{ novo_paciente.senha }}"
+        );
+    </script>
 
+    <!-- ✅ VERSÃO 2: Alerta personalizado com redirecionamento -->
+    <script>
         window.onload = function() {
-            // 1. Cria o elemento do alerta
             const alertDiv = document.createElement('div');
             alertDiv.id = 'custom-success-alert';
-            alertDiv.textContent = 'Cadastro efetuado com sucesso!';
-        
-            // 2. Aplica estilos para ser um ALERTA FIXO e centralizado
+            alertDiv.innerHTML = `
+                <strong>✅ Paciente cadastrado com sucesso!</strong><br>
+                Nome: {{ novo_paciente.nome }}<br>
+                E-mail: {{ novo_paciente.email }}<br>
+                Senha: {{ novo_paciente.senha }}
+            `;
+
             alertDiv.style.cssText = `
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                padding: 20px 30px;
-                background-color: #4CAF50; /* Cor de sucesso */
+                padding: 25px 35px;
+                background-color: #4CAF50;
                 color: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                z-index: 9999;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
                 font-size: 18px;
-                opacity: 0; /* Começa invisível */
+                text-align: center;
+                opacity: 0;
                 transition: opacity 0.5s;
+                z-index: 9999;
             `;
-        
-            // 3. Adiciona ao corpo do documento e o torna visível
+
             document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.style.opacity = 1, 50);
+
+            // Fecha e redireciona após 5 segundos
             setTimeout(() => {
-                alertDiv.style.opacity = 1;
-            }, 50); // Pequeno delay para garantir a transição
-        
-            // 4. Temporizador para fechar após 5 segundos E REDIRECIONAR
-            setTimeout(() => {
-                alertDiv.style.opacity = 0; // Inicia o fade out
-                
-                // Remove o elemento APÓS a transição E REDIRECIONA
+                alertDiv.style.opacity = 0;
                 setTimeout(() => {
                     alertDiv.remove();
-                    
-                    // --- REDIRECIONAMENTO ADICIONADO AQUI ---
-                    // Redireciona para a URL do dashboard
-                    // É crucial que 'dashboard_nutricionista' esteja definida no urls.py
-                    window.location.href = "{% url 'nutri_dashboard' %}"; 
-                    // ----------------------------------------
-                    
-                }, 500); // 500ms é o tempo da transição
-            }, 5000); // 5000ms (5 segundos) é o tempo de permanência
+                    window.location.href = "{% url 'nutri_dashboard' %}";
+                }, 500);
+            }, 5000);
         };
     </script>
 {% endif %}
